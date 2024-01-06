@@ -1,0 +1,22 @@
+{
+    "title": "Islamic Centre",
+    "description": "Prayer Timetable",
+    "online": true,
+    "url": {
+        "settings": "https://ensar.me/api/settings/",
+        "timetable": "https://ensar.me/api/timetable/"
+    },
+    "announcement": "Welcome!",
+    "text": {
+        "en": "Assalamu Alaikum",
+        "ar": "السَّلَامُ عَلَيْكُمْ"
+    },
+    "hijrioffset": "0",
+    "join": "0",
+    "jummuahtime": [13,40],
+    "taraweehtime": [23,15],
+    "jamaahmethods": ["beforenext","","fixed","afterthis","afterthis","fixed"],
+    "jamaahoffsets": [[0,30],[],[13,50],[0,15],[0,10],[22,58]],
+    "updated": 1514764800
+  }
+  

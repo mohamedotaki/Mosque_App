@@ -1,0 +1,66 @@
+.CardMain {
+  background-color: rgba(237, 237, 237, 0.771);
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.CardImage {
+  width: 100%;
+  border-radius: 20px 20px 0 0;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.Line {
+  width: 90%;
+  margin: 0 auto;
+  color: rgb(0, 0, 0);
+}
+
+.CardTitle {
+  font-size: large;
+  margin-left: 10px;
+  padding-top: 5px;
+}
+
+.CardText {
+  font-size: medium;
+  margin-left: 15px;
+  padding-bottom: 10px;
+  overflow-wrap: break-word;
+}
+
+.PostDate {
+  margin-left: 2%;
+  display: inline-flex;
+  width: 48%;
+  color: gray;
+}
+
+.AdminButtons {
+  justify-content: right;
+  position: relative;
+  right: 0;
+  display: inline-flex;
+  width: 50%;
+}
+
+.AdminBT {
+  font-weight: bold;
+  border: 0cap;
+  background-color: rgba(240, 248, 255, 0);
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.tests {
+  margin-bottom: 10px;
+  width: 98%;
+  margin: auto;
+}
+
+.ImagePreview {
+  width: 100%;
+  margin-bottom: 10px;
+}

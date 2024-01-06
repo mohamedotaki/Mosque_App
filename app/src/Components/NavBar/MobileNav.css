@@ -1,0 +1,27 @@
+@media only screen and (max-width: 600px) {
+  .NavMain {
+    width: 100%;
+    height: inherit;
+    position: fixed;
+    background-color: rgba(196, 196, 196, 0.953);
+    border-radius: 20px 20px 0px 0px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .Buttons {
+    background-color: inherit;
+    border: 0;
+    font-size: xx-large;
+  }
+
+  .Selected {
+    color: green;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .NavMain {
+    display: none;
+  }
+}

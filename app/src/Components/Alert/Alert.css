@@ -1,0 +1,48 @@
+.AlertMessage {
+  display: inline-block;
+  white-space: normal;
+  overflow-wrap: break-word;
+  width: 75%;
+  text-align: start;
+  margin-left: 3%;
+}
+
+.PopupIcon {
+  display: inline-block;
+  height: 100%;
+  width: 30px;
+  margin: auto;
+}
+
+.AlertOuter {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: first baseline;
+  background-color: rgba(109, 109, 109, 0.652);
+  z-index: 6;
+}
+.AlertInner {
+  top: 5px;
+  position: relative;
+  padding: 10px;
+  width: 95%;
+  max-width: 380px;
+  background-color: rgb(250, 250, 250);
+  border-radius: 25px;
+  animation-name: movePopup;
+  animation-duration: 0.5s;
+}
+
+@keyframes movePopup {
+  from {
+    top: -90px;
+  }
+  to {
+    top: 5px;
+  }
+}

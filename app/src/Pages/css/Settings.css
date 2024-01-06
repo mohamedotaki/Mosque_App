@@ -1,0 +1,31 @@
+@media only screen and (max-width: 600px) {
+  .ListItem {
+    height: 50px;
+    width: 50%;
+    text-align: center;
+    border-right: 0px;
+    border-radius: 0px;
+  }
+  .ContactListDiv {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+  .ContactListItem {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+}
+
+.Main {
+  height: 90%;
+  width: 100%;
+  user-select: none; /* Standard syntax */
+}
+
+a {
+  text-decoration: none; /* no underline */
+}

@@ -1,0 +1,34 @@
+.NotifOuter {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: first baseline;
+  background-color: rgba(109, 109, 109, 0.652);
+  z-index: 4;
+}
+.NotifInner {
+  top: 65px;
+  position: relative;
+  padding: 10px;
+  width: 95%;
+  max-width: 380px;
+  background-color: rgb(250, 250, 250);
+  border-radius: 25px;
+  animation-name: movePopup;
+  animation-duration: 0.5s;
+}
+
+@keyframes movePopup {
+  from {
+    top: 0px;
+  }
+  to {
+    top: 65px;
+  }
+}

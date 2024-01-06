@@ -1,0 +1,71 @@
+@media only screen and (max-width: 600px) {
+  .Main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .ContactUs {
+    margin-top: 20px;
+    width: 100%;
+  }
+  .Feedback {
+    width: 90%;
+    margin: 30px auto;
+  }
+  .Location {
+    margin: 20px auto;
+
+    width: 90%;
+  }
+
+  .Info {
+    border: 2px;
+    border-style: solid;
+    border-radius: 13px;
+    border-color: rgb(254, 255, 167);
+    background-color: rgb(255, 254, 218);
+    padding: 4px;
+  }
+
+  .ContactUsElements {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+    align-items: center;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .Main {
+    width: 85%;
+    margin: 50px auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .ContactUs {
+    width: 60%;
+  }
+  .Feedback {
+    text-align: center;
+    width: 80%;
+    margin: 20px auto;
+  }
+  .Location {
+    width: 40%;
+  }
+
+  .Info {
+    border: 2px;
+    border-style: solid;
+    border-radius: 13px;
+    border-color: rgb(254, 255, 167);
+    background-color: rgb(255, 254, 218);
+    padding: 4px;
+  }
+
+  .ContactUsElements {
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 30px;
+    margin-top: 40px;
+  }
+}

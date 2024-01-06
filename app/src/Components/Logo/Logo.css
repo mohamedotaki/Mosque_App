@@ -1,0 +1,43 @@
+.MainLogo {
+  display: inline-block;
+  position: absolute;
+  left: 15px;
+  top: 5px;
+  height: inherit;
+  text-align: center;
+  z-index: 5;
+  user-select: none; /* Standard syntax */
+}
+
+.Logo {
+  display: inline;
+  width: 50px;
+  height: 50px;
+}
+
+.LogoText {
+  display: inline;
+  font-size: 20px;
+  position: absolute;
+  height: inherit;
+  width: 180px;
+  text-align: start;
+  vertical-align: middle;
+  line-height: 50px; /* The same as your div height */
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+  .Link {
+    text-decoration: none; /* no underline */
+    color: black;
+    pointer-events: none;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .Link {
+    text-decoration: none; /* no underline */
+    color: black;
+  }
+}

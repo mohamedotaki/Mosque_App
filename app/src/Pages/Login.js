@@ -3,58 +3,38 @@ import Form from "react-bootstrap/Form";
 import "./css/Login.css";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiLink } from "../db/dbFunctions";
+import { login } from "../db/dbFunctions";
 
 export default function Login(props) {
-  var email = "";
-  var password = "";
-  const password1 = useRef();
-  const email1 = useRef();
+  const password = useRef();
+  const email = useRef();
   const navigate = useNavigate();
 
-  const logIn = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault(); // 👈️ prevent page refresh
-
-    password = password1.current.value;
-    email = email1.current.value;
-    fetch(apiLink("auth"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        console.log(r);
-        if ("success" === r.message) {
-          console.log(r);
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              email,
-              userType: r.userType,
-              isSignedIn: true,
-              token: r.token,
-            })
-          );
-          navigate("/");
-          //window.location.reload(false);
-          //props.setLoggedIn(true);
-          //props.setEmail(email);
-          //navigate("/Home");
-        } else {
-          window.alert(r.message);
-        }
-      });
+    login(email.current.value, password.current.value).then((res) => {
+      console.log(res.message);
+      if (res.message) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: email.current.value,
+            userType: res.userType,
+            isSignedIn: res.message,
+            token: res.token,
+          })
+        );
+        navigate("/");
+      }
+    });
   };
 
   return (
     <>
-      <Form className="Login" onSubmit={logIn}>
+      <Form className="Login" onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" ref={email1} />
+          <Form.Control type="email" placeholder="Enter email" ref={email} />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
@@ -62,11 +42,7 @@ export default function Login(props) {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            ref={password1}
-          />
+          <Form.Control type="password" placeholder="Password" ref={password} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Stay logged in" />

@@ -5,15 +5,6 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const multer = require("multer");
 
-//local use
-/* const db = mysql.createConnection({
-  host: "localhost",
-  port: "3306",
-  user: "root",
-  password: "root",
-  database: "mosque_db",
-}); */
-//production
 const db = mysql.createConnection({
   host: "localhost",
   port: "3306",
@@ -51,10 +42,12 @@ app.get("/prayerTimes", (req, res) => {
 });
 
 app.post("/updatePrayerTime", (req, res) => {
-  const { Name, Time } = req.body;
+  const { Name, Time, Offset } = req.body;
   const q =
     "UPDATE prayertimes SET Iqamah = " +
     mysql.escape(Time) +
+    ", Offset = " +
+    mysql.escape(Offset) +
     " WHERE Name =" +
     mysql.escape(Name);
   console.log(q);
@@ -84,9 +77,11 @@ app.get("/getfeedback", (req, res) => {
 });
 
 app.post("/addfeedback", (req, res) => {
-  const { email, feedback } = req.body;
+  const { name, email, feedback } = req.body;
   const q =
-    "INSERT INTO feedback (email, feedback) VALUES (" +
+    "INSERT INTO feedback (Name, email, feedback) VALUES (" +
+    mysql.escape(name) +
+    "," +
     mysql.escape(email) +
     "," +
     mysql.escape(feedback) +
@@ -94,7 +89,7 @@ app.post("/addfeedback", (req, res) => {
 
   db.query(q, (err, data) => {
     if (err) return res.json(err);
-    return res.json({ message: "feedback Was Sent" });
+    return res.json({ message: true });
   });
 });
 
@@ -172,7 +167,7 @@ app.get("/getposts", (req, res) => {
 });
 
 ///////////////////////signin a user////////////////////////////////
-app.post("/auth", (req, res) => {
+app.post("/login", (req, res) => {
   const { email, password } = req.body;
   // Look up the user entry in the database
   const q = "SELECT * FROM users WHERE Email=" + mysql.escape(email);
@@ -192,7 +187,7 @@ app.post("/auth", (req, res) => {
           const token = jwt.sign(loginData, jwtSecretKey);
           res
             .status(200)
-            .json({ userType: user[0].userType, message: "success", token });
+            .json({ userType: user[0].userType, message: true, token });
         }
       });
     } else {

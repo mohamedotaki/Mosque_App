@@ -25,6 +25,7 @@
   vertical-align: middle;
   line-height: 50px; /* The same as your div height */
   font-weight: bold;
+  text-wrap: nowrap;
 }
 
 @media only screen and (max-width: 600px) {

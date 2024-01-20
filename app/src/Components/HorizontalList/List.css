@@ -1,10 +1,13 @@
 .ListPos {
-  width: 50%;
+  width: 40%;
   text-align: center;
   user-select: none; /* Standard syntax */
+  min-width: 100px;
 }
 
 .Title {
+  min-width: 300px;
+
   width: 100%;
   text-align: center;
   font-weight: bold;
@@ -16,18 +19,14 @@
   );
 }
 .TimePos {
-  width: 25%;
+  min-width: 100px;
+  width: 30%;
   text-align: center;
   user-select: none; /* Standard syntax */
 }
 
-.selected1 {
-  width: 50%;
-  background-color: rgba(51, 197, 78, 0.597);
-}
-.selected2 {
-  width: 25%;
-  background-color: rgba(51, 197, 78, 0.597);
+.selected {
+  background-color: #15b27e;
 }
 
 .TimeChange {
@@ -53,4 +52,26 @@
   background-color: #004e34;
   color: azure;
   width: 20%;
+}
+
+.TimeFormat {
+  min-width: 300px;
+
+  width: 100%;
+  text-align: end;
+  margin-bottom: 5px;
+}
+.TimeFormat24 {
+  border-radius: 20px 0 0 20px;
+  border: 0;
+}
+.TimeFormat12 {
+  border-radius: 0 20px 20px 0;
+  border: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .TimeFormat {
+    display: none;
+  }
 }

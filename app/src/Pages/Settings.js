@@ -1,7 +1,6 @@
 import DropDown from "../Components/DropDown/DropDown";
 import "./css/Settings.css";
 import ListGroup from "react-bootstrap/ListGroup";
-import Form from "react-bootstrap/Form";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,29 +16,36 @@ export default function Settings(props) {
   const [defaultPage, setDefaultPage] = React.useState(
     localStorage.getItem("defaultPage").substring(1)
   );
+  const [timeFormat, setTimeFormat] = React.useState(
+    localStorage.getItem("timeFormat")
+  );
   const defaultPageData = [
     { name: "Home", value: "/Home" },
     { name: "Prayer Times", value: "/PrayerTimes" },
   ];
-  const languageData = [
-    { name: "English", value: "English" },
-    { name: "العربية", value: "Arabic" },
+  const defaultTimeFormat = [
+    { name: "24h", value: "24h" },
+    { name: "12h", value: "12h" },
   ];
 
   const storeDefaultPage = (data) => {
     localStorage.setItem("defaultPage", data);
   };
 
+  const storeTimeFormat = (data) => {
+    localStorage.setItem("timeFormat", data);
+  };
+
   const navigate = useNavigate();
 
   return (
-    <div className="Main">
+    <div className="Settings">
       {/*   <ListGroup horizontal>
         <ListGroup.Item className="ListItem">
           <p>Dark Mode</p>
         </ListGroup.Item>
       </ListGroup> */}
-      <ListGroup horizontal>
+      {/*     <ListGroup horizontal>
         <ListGroup.Item className="ListItem">Default Page</ListGroup.Item>
         <ListGroup.Item className="ListItem">
           <DropDown
@@ -48,12 +54,15 @@ export default function Settings(props) {
             results={storeDefaultPage}
           />
         </ListGroup.Item>
-      </ListGroup>
+      </ListGroup> */}
       <ListGroup horizontal>
         <ListGroup.Item className="ListItem">Time Format:</ListGroup.Item>
         <ListGroup.Item className="ListItem">
-          <button style={{ borderRadius: "20px 0 0 20px" }}>12h</button>
-          <button style={{ borderRadius: "0 20px 20px 0" }}>24h</button>
+          <DropDown
+            name={timeFormat ? timeFormat : "Select Format"}
+            data={defaultTimeFormat}
+            results={storeTimeFormat}
+          />
         </ListGroup.Item>
       </ListGroup>
       {/*       <ListGroup horizontal>
@@ -147,6 +156,16 @@ export default function Settings(props) {
               }}
             />
             Logout
+          </ListGroup.Item>
+          <ListGroup.Item
+            className="ContactListItem"
+            style={{
+              color: "green",
+              display: props.user.isSignedIn === true ? "" : "none",
+            }}
+            onClick={() => navigate("/FeedbackReview")}
+          >
+            Feedback Review
           </ListGroup.Item>
         </ListGroup>
       </div>

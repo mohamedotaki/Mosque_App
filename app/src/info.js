@@ -1,2 +1,2 @@
-const businessName = "Ballyhanis Mosque";
+const businessName = "Ballyhaunis Mosque";
 export default businessName;

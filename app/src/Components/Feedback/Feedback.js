@@ -3,6 +3,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
+import { addfeedback } from "../../db/dbFunctions";
 
 export default function Feedback(props) {
   const [name, setName] = useState("");
@@ -11,25 +12,13 @@ export default function Feedback(props) {
 
   const sendFeedback = (event) => {
     event.preventDefault();
-
-    fetch("http://localhost:3001/addfeedback", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, feedback }),
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        if ("feedback Was Sent" === r.message) {
-          console.log(r);
-          setEmail("");
-          setFeedback("");
-          setName("");
-          event.reset();
-        } else {
-        }
-      });
+    addfeedback(name, email, feedback).then((r) => {
+      if (r.message) {
+        setEmail("");
+        setFeedback("");
+        setName("");
+      }
+    });
   };
 
   return (
@@ -38,6 +27,7 @@ export default function Feedback(props) {
         <Form.Label>Name</Form.Label>
         <Form.Control
           type="Name"
+          value={name}
           placeholder="example: Ahmad"
           onChange={(e) => setName(e.target.value)}
         />
@@ -46,11 +36,13 @@ export default function Feedback(props) {
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="name@example.com"
+          value={email}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         <Form.Label>Feedback</Form.Label>
         <Form.Control
+          value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
           as="textarea"
           rows={3}

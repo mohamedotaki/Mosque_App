@@ -9,11 +9,14 @@ import Donation from "./Pages/Donation";
 import PrayerTimes from "./Pages/PrayerTimes";
 import ContactUs from "./Pages/ContactUs";
 import Login from "./Pages/Login";
+import Qibla from "./Pages/Qibla";
 import { isMobile } from "react-device-detect";
 import Logo from "./Components/Logo/Logo";
 import MobileNav from "./Components/NavBar/MobileNav";
 import Settings from "./Pages/Settings";
 import Popup from "./Components/Popup/Popup";
+import FeedbackReview from "./Pages/FeedbackReview";
+import InstallButton from "./Components/InstallButton";
 
 function App() {
   if (localStorage.getItem("user") === null) {
@@ -27,7 +30,7 @@ function App() {
     );
   }
   if (localStorage.getItem("defaultPage") === null) {
-    localStorage.setItem("defaultPage", "/Home");
+    localStorage.setItem("defaultPage", "/PrayerTimes");
   }
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -35,16 +38,21 @@ function App() {
   const updateUserState = () => {
     setLoggedIn(!loggedin);
   };
+
   return (
     <>
       <div className="Header">
         <NavBar user={user} />
-      </div>
-      <div className="Body">
         <div className="Donation">
-          <strong>Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D</strong>
-        </div>
+          <strong className="DonationText">
+            Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D
+          </strong>
 
+          <InstallButton></InstallButton>
+        </div>
+      </div>
+
+      <div className="Body">
         <BrowserRouter>
           <Routes>
             <Route
@@ -55,7 +63,9 @@ function App() {
               path="/"
               element={
                 isMobile ? (
-                  <Navigate to={localStorage.getItem("defaultPage")} />
+                  <Navigate
+                    to="/PrayerTimes" /* {localStorage.getItem("defaultPage")} */
+                  />
                 ) : (
                   <Navigate to="/Home" />
                 )
@@ -66,6 +76,9 @@ function App() {
             <Route path="/PrayerTimes" element={<PrayerTimes user={user} />} />
             <Route path="/About" element={<About />} />
             <Route path="/ContactUs" element={<ContactUs />} />
+            <Route path="/Qibla" element={<Qibla />} />
+            <Route path="/FeedbackReview" element={<FeedbackReview />} />
+
             <Route path="/Settings" element={<Settings user={user} />} />
           </Routes>
         </BrowserRouter>

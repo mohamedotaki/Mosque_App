@@ -1,12 +1,13 @@
 import Admin from "../Admin/Admin";
 import "./Card.css";
 import CardEdit from "./CardEdit";
-import { PencilSquare, PlusSquare, Trash } from "react-bootstrap-icons";
+import { PencilSquare, Trash } from "react-bootstrap-icons";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Confirm from "../Confirm/Confirm";
 import { deletePost } from "../../db/dbFunctions";
+import DOMPurify from "dompurify";
 
 export default function Card(props) {
   const [showForm, setShowForm] = useState(false);
@@ -26,7 +27,14 @@ export default function Card(props) {
         )}
         <h2 className="CardTitle">{props.Data.title}</h2>
         <hr className="Line"></hr>
-        <p className="CardText">{props.Data.contant}</p>
+        <div
+          className="CardText"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(props.Data.contant),
+          }}
+        >
+          {}
+        </div>
         <p className="PostDate">{props.Data.postDate.substring(0, 10)}</p>
         <div
           className="AdminButtons"
@@ -42,7 +50,10 @@ export default function Card(props) {
               setConfirm({
                 show: true,
                 message: "Are you sure you want to delete this post?",
-                fun: () => deletePost(props.Data.id /*  props.user.token */),
+                fun: () =>
+                  deletePost(props.Data.id).then((result) =>
+                    result.message ? props.getPosts() : ""
+                  ),
               });
             }}
           >
@@ -50,7 +61,13 @@ export default function Card(props) {
           </button>
         </div>
         <div style={{ display: props.user.userType === "Admin" ? "" : "none" }}>
-          <CardEdit update={true} data={props.Data} trigger={showForm} />
+          <CardEdit
+            update={true}
+            data={props.Data}
+            trigger={showForm}
+            setTrigger={setShowForm}
+            updateView={props.getPosts}
+          />
         </div>
       </div>
       <Confirm

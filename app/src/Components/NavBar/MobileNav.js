@@ -1,5 +1,12 @@
 import "./MobileNav.css";
-import { House, Clock, People, Telephone, Gear } from "react-bootstrap-icons";
+import {
+  House,
+  Clock,
+  People,
+  Telephone,
+  Gear,
+  Compass,
+} from "react-bootstrap-icons";
 import React from "react";
 
 function MobileNav(prams) {
@@ -47,6 +54,16 @@ function MobileNav(prams) {
           <Telephone />
         </button>
       </a> */}
+      <a href="Qibla">
+        <button
+          className={
+            currentBT.search("Qibla") > 0 ? "Buttons Selected" : "Buttons"
+          }
+        >
+          <Compass />
+        </button>
+      </a>
+
       <a href="Settings">
         <button
           className={

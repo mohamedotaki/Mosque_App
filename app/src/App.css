@@ -7,7 +7,7 @@
 
   .Body {
     position: fixed;
-    top: 60px;
+    top: 112px;
     bottom: 60px;
     right: 0;
     left: 0;
@@ -21,6 +21,16 @@
     z-index: 5;
     width: 100%;
   }
+
+  .Donation {
+    position: fixed;
+    height: 50px;
+    top: 60px;
+    width: 100%;
+    background-color: rgba(250, 235, 215, 0.852);
+    border-radius: 20px;
+    text-align: center;
+  }
 }
 
 @media only screen and (min-width: 600px) {
@@ -29,19 +39,22 @@
     top: 0;
     z-index: 5;
   }
+  .Donation {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    background-color: rgba(250, 235, 215, 0.852);
+    text-align: center;
+    margin: auto;
+    border-radius: 20px;
+  }
+
   .Body {
     position: absolute;
-    top: 60px;
+    top: 70px;
     bottom: 0;
     width: 100%;
   }
   .Footer {
   }
-}
-
-.Donation {
-  background-color: antiquewhite;
-  text-align: center;
-  margin: auto;
-  border-radius: 20px;
 }

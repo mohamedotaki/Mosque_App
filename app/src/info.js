@@ -1,2 +1,4 @@
 const businessName = "Ballyhaunis Mosque";
-export default businessName;
+const appVersion = require("../package.json").version;
+
+export { businessName, appVersion };

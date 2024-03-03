@@ -29,14 +29,19 @@ export default function CardEdit({
     event.preventDefault();
     if (update) {
       updatePost(data.id, title, contant).then((result) => {
-        if (result.message) {
+        if (result === true) {
           updateUser();
+        } else {
+          alert(result);
         }
       });
     } else {
       addPost(title, contant).then((result) => {
-        if (result.message) {
+        console.log(result);
+        if (result === true) {
           updateUser();
+        } else {
+          alert(result);
         }
       });
     }

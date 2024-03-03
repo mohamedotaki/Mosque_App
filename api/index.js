@@ -4,15 +4,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const multer = require("multer");
-
+const port = process.env.port || 3001;
+const appVersion = process.env.app_version || "9999";
 const db = mysql.createConnection({
-  host: "localhost",
-  port: "3306",
-  user: "alottpil_admin",
-  password: "AdminMosqueDB",
-  database: "alottpil_mosqueapp",
+  host: process.env.db_host || "localhost",
+  port: process.env.db_port || "3306",
+  user: process.env.db_user || "root",
+  password: process.env.db_pass || "root",
+  database: process.env.db_name || "mosque_db",
 });
-const jwtSecretKey = "dsfdsfsdfdsvcsvdfgefg";
+const jwtSecretKey = process.env.key || "1234q1234";
 
 const imageUploadPath = "/home/alottpil/mosqueapp.api.alotaki.com/images";
 const storage = multer.diskStorage({
@@ -26,12 +27,15 @@ const storage = multer.diskStorage({
 
 const imageUpload = multer({ storage: storage });
 
-//const PORT = process.env.PORT || 3001;
-
 const app = express();
 app.use(cors());
 
 app.use(express.json());
+
+app.get("/appVersion", (req, res) => {
+  return res.json(appVersion);
+});
+
 ////////////Prayer Times//////////////////
 app.get("/prayerTimes", (req, res) => {
   const q = "SELECT * FROM prayertimes";
@@ -42,18 +46,22 @@ app.get("/prayerTimes", (req, res) => {
 });
 
 app.post("/updatePrayerTime", (req, res) => {
+  const token = req.headers["user-token"];
+  if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  }
   const { Name, Time, Offset } = req.body;
   const q =
-    "UPDATE prayertimes SET Iqamah = " +
+    "UPDATE `prayertimes` SET `Iqamah` = " +
     mysql.escape(Time) +
-    ", Offset = " +
+    ", `Offset` = " +
     mysql.escape(Offset) +
-    " WHERE Name =" +
+    "WHERE `prayertimes`.`Name` = " +
     mysql.escape(Name);
-  console.log(q);
-  db.query(q, (err, data) => {
-    if (err) return res.json({ message: false });
-    return res.json({ message: true });
+
+  db.query(q, (err) => {
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
   });
 });
 
@@ -117,24 +125,34 @@ app.post("/uploadImage", (req, res) => {
 });
 
 app.post("/addposts", (req, res) => {
-  const { title, contant, imageLink } = req.body;
+  const token = req.headers["user-token"];
+  if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  }
+  const { title, contant } = req.body;
+
   const q =
     "INSERT INTO posts (title, contant, image) VALUES (" +
     mysql.escape(title) +
     "," +
     mysql.escape(contant) +
     "," +
-    mysql.escape(imageLink) +
+    mysql.escape(null) +
     ")";
 
-  db.query(q, (err, data) => {
-    if (err) return res.json(err);
-    return res.json({ message: true });
+  db.query(q, (err) => {
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
   });
 });
 
 app.post("/updatepost", (req, res) => {
+  const token = req.headers["user-token"];
+  if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  }
   const { id, title, contant } = req.body;
+
   const q =
     "UPDATE posts SET title = " +
     mysql.escape(title) +
@@ -142,19 +160,21 @@ app.post("/updatepost", (req, res) => {
     mysql.escape(contant) +
     " WHERE id =" +
     id;
-  console.log(q);
-  db.query(q, (err, data) => {
-    if (err) return res.json(err);
-    return res.json({ message: true });
+  db.query(q, (err) => {
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
   });
 });
-
 app.post("/deletePost", (req, res) => {
+  const token = req.headers["user-token"];
+  if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  }
   const { id } = req.body;
   const q = "DELETE FROM posts WHERE id=" + mysql.escape(id);
   db.query(q, (err) => {
-    if (err) return res.json({ message: "Error444" });
-    return res.json({ message: true });
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
   });
 });
 
@@ -247,18 +267,15 @@ app.post("/verify", (req, res) => {
   }
 });
 
-function verifyToken({ token }) {
+function verifyToken(token) {
   try {
-    return jwt.verify(token, jwtSecretKey);
+    if (jwt.verify(token, jwtSecretKey)) {
+      return true;
+    }
   } catch (error) {
-    console.log("in cathch");
     return false;
   }
 }
 
-/* app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-}); */
-
 //production
-app.listen();
+app.listen(port);

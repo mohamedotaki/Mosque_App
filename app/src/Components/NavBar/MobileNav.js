@@ -1,78 +1,43 @@
 import "./MobileNav.css";
-import {
-  House,
-  Clock,
-  People,
-  Telephone,
-  Gear,
-  Compass,
-} from "react-bootstrap-icons";
+
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHouse,
+  faGear,
+  faCompass,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
+import { Link, useLocation } from "react-router-dom";
 
 function MobileNav(prams) {
   const [currentBT, setCurrentBT] = React.useState(window.location.href);
+  const navButtons = [
+    { name: "Home", icon: faHouse, link: "/Home" },
+    { name: "Prayer Times", icon: faClock, link: "/PrayerTimes" },
+    { name: "Qibla", icon: faCompass, link: "/Qibla" },
+    { name: "Settings", icon: faGear, link: "/Settings" },
+  ];
 
   React.useEffect(() => {
     setCurrentBT(window.location.href);
   }, [window.location.href]);
 
+  const currentTap = useLocation().pathname;
+
   return (
     <nav className="NavMain">
-      <a href="Home">
-        <button
-          className={
-            currentBT.search("Home") > 0 ? "Buttons Selected" : "Buttons"
-          }
+      {navButtons.map((item) => (
+        <Link
+          to={item.link}
+          key={item.name}
+          onClick={() => window.history.replaceState({}, "")}
+          className={currentTap === item.link ? "Buttons Selected" : "Buttons"}
         >
-          <House />
-        </button>
-      </a>
-      <a href="PrayerTimes">
-        <button
-          className={
-            currentBT.search("PrayerTimes") > 0 ? "Buttons Selected" : "Buttons"
-          }
-        >
-          <Clock />
-        </button>
-      </a>
-      {/*  <a href="About">
-        <button
-          className={
-            currentBT.search("About") > 0 ? "Buttons Selected" : "Buttons"
-          }
-        >
-          <People />
-        </button>
-      </a>
-      <a href="ContactUs">
-        <button
-          className={
-            currentBT.search("ContactUs") > 0 ? "Buttons Selected" : "Buttons"
-          }
-        >
-          <Telephone />
-        </button>
-      </a> */}
-      <a href="Qibla">
-        <button
-          className={
-            currentBT.search("Qibla") > 0 ? "Buttons Selected" : "Buttons"
-          }
-        >
-          <Compass />
-        </button>
-      </a>
-
-      <a href="Settings">
-        <button
-          className={
-            currentBT.search("Settings") > 0 ? "Buttons Selected" : "Buttons"
-          }
-        >
-          <Gear />
-        </button>
-      </a>
+          <FontAwesomeIcon icon={item.icon} style={{ fontSize: "25px" }} />
+          {item.name}
+        </Link>
+      ))}
     </nav>
   );
 }

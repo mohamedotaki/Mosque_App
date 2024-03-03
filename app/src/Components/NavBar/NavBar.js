@@ -2,44 +2,46 @@ import "./NavBar.css";
 import Logo from "../Logo/Logo";
 import { Justify } from "react-bootstrap-icons";
 import React from "react";
+import { setUser_localDB } from "../../db/local_db";
+import { Link, useLocation } from "react-router-dom";
 
 function BasicExample(prams) {
   const [trigger, setTrigger] = React.useState(false);
+  const navLinks = [
+    { name: "Home", link: "/Home" },
+    { name: "About Us", link: "/About" },
+    { name: "Contact Us", link: "/ContactUs" },
+  ];
+
+  const currentTap = useLocation().pathname;
+
+  console.log(currentTap);
 
   return (
     <nav className="NavPos">
-      <div className="Logo">
+      <div>
         <Logo />
       </div>
       <div className="LinksPos">
-        <a className="LinksStyle" href="Home">
-          Home
-        </a>
-        <a className="LinksStyle hidden" href="PrayerTimes">
-          PrayerTimes
-        </a>
-        {/* <a className="LinksStyle" href="Donation">
-          Donation
-        </a> */}
-        <a className="LinksStyle" href="About">
-          About Us
-        </a>
-        <a className="LinksStyle" href="ContactUs">
-          Contact Us
-        </a>
+        {navLinks.map((item) => (
+          <Link
+            to={item.link}
+            key={item.name}
+            className={
+              currentTap === item.link
+                ? "LinksStyle textColor-secondary"
+                : "LinksStyle"
+            }
+          >
+            {item.name}
+          </Link>
+        ))}
         <a
           style={{ display: prams.user.isSignedIn ? "" : "none" }}
           className="LinksStyle"
           href="Home"
           onClick={() => {
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                userType: "User",
-                isSignedIn: false,
-                token: null,
-              })
-            );
+            setUser_localDB();
           }}
         >
           Logout

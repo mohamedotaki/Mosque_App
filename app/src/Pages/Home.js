@@ -11,7 +11,11 @@ export default function Home(props) {
   const [showForm, setShowForm] = React.useState(false);
 
   const updatePosts = () => {
-    getPosts().then((data) => setPosts(data));
+    getPosts().then((data) => {
+      setPosts(data);
+      console.log(data);
+    });
+
     setShowForm(false);
   };
 

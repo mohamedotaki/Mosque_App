@@ -11,6 +11,4 @@ export const logout = () => {
   return;
 };
 
-export const login = () => {
-  console.log("4324324324");
-};
+export const login = () => {};

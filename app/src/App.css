@@ -1,3 +1,10 @@
+:root {
+  --primary: #6222cc;
+  --secondary: #096647;
+  --light: #f6f4f9;
+  --dark: #04000b;
+}
+
 @media only screen and (max-width: 600px) {
   .Header {
     position: fixed;
@@ -8,7 +15,7 @@
   .Body {
     position: fixed;
     top: 112px;
-    bottom: 60px;
+    bottom: 72px;
     right: 0;
     left: 0;
     width: 100%;
@@ -16,8 +23,8 @@
   }
   .Footer {
     position: fixed;
+    height: fit-content;
     bottom: 0;
-    height: 55px;
     z-index: 5;
     width: 100%;
   }
@@ -57,4 +64,28 @@
   }
   .Footer {
   }
+}
+
+.fill-x-size {
+  width: 100%;
+}
+
+.blockSelection {
+  user-select: none;
+}
+
+.centerxy {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.maxXY {
+  width: 100%;
+  height: 100%;
+}
+
+.textColor-secondary {
+  color: var(--secondary) !important;
 }

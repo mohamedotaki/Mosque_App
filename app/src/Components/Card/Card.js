@@ -52,7 +52,7 @@ export default function Card(props) {
                 message: "Are you sure you want to delete this post?",
                 fun: () =>
                   deletePost(props.Data.id).then((result) =>
-                    result.message ? props.getPosts() : ""
+                    result ? props.getPosts() : alert(result)
                   ),
               });
             }}

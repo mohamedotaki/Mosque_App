@@ -1,10 +1,11 @@
 .MainLogo {
+  width: 300px;
   display: inline-block;
   position: absolute;
   left: 15px;
   top: 5px;
   height: inherit;
-  text-align: center;
+  text-align: left;
   z-index: 5;
   user-select: none; /* Standard syntax */
 }
@@ -20,12 +21,10 @@
   font-size: 20px;
   position: absolute;
   height: inherit;
-  width: 180px;
+  width: fit-content;
   text-align: start;
-  vertical-align: middle;
   line-height: 50px; /* The same as your div height */
   font-weight: bold;
-  text-wrap: nowrap;
 }
 
 @media only screen and (max-width: 600px) {

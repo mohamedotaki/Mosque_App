@@ -11,77 +11,64 @@ import ContactUs from "./Pages/ContactUs";
 import Login from "./Pages/Login";
 import Qibla from "./Pages/Qibla";
 import { isMobile } from "react-device-detect";
-import Logo from "./Components/Logo/Logo";
 import MobileNav from "./Components/NavBar/MobileNav";
 import Settings from "./Pages/Settings";
-import Popup from "./Components/Popup/Popup";
 import FeedbackReview from "./Pages/FeedbackReview";
 import InstallButton from "./Components/InstallButton";
+import UpdateApp from "./Fun/UpdateApp";
+import { getUser_localDB, setUser_localDB } from "./db/local_db";
 
 function App() {
-  if (localStorage.getItem("user") === null) {
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        userType: "User",
-        isSignedIn: false,
-        token: null,
-      })
-    );
-  }
-  if (localStorage.getItem("defaultPage") === null) {
-    localStorage.setItem("defaultPage", "/PrayerTimes");
+  if (getUser_localDB() === null) {
+    setUser_localDB();
   }
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = getUser_localDB();
+  console.log(user);
   const [loggedin, setLoggedIn] = React.useState(user.isSignedIn);
+
   const updateUserState = () => {
     setLoggedIn(!loggedin);
   };
+
+  UpdateApp(); // forces update
 
   return (
     <>
       <div className="Header">
         <NavBar user={user} />
         <div className="Donation">
-          <strong className="DonationText">
-            Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D
-          </strong>
+          <strong>Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D</strong>
 
           <InstallButton></InstallButton>
         </div>
       </div>
 
       <div className="Body">
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/Login"
-              element={<Login updateLogin={updateUserState} />}
-            />
-            <Route
-              path="/"
-              element={
-                isMobile ? (
-                  <Navigate
-                    to="/PrayerTimes" /* {localStorage.getItem("defaultPage")} */
-                  />
-                ) : (
-                  <Navigate to="/Home" />
-                )
-              }
-            />
-            <Route path="/Home" element={<Home user={user} />} />
-            <Route path="/Donation" element={<Donation />} />
-            <Route path="/PrayerTimes" element={<PrayerTimes user={user} />} />
-            <Route path="/About" element={<About />} />
-            <Route path="/ContactUs" element={<ContactUs />} />
-            <Route path="/Qibla" element={<Qibla />} />
-            <Route path="/FeedbackReview" element={<FeedbackReview />} />
-
-            <Route path="/Settings" element={<Settings user={user} />} />
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route
+            path="/Login"
+            element={<Login updateLogin={updateUserState} />}
+          />
+          <Route
+            path="/"
+            element={
+              isMobile ? (
+                <Navigate to="/PrayerTimes" />
+              ) : (
+                <Navigate to="/Home" />
+              )
+            }
+          />
+          <Route path="/Home" element={<Home user={user} />} />
+          <Route path="/Donation" element={<Donation />} />
+          <Route path="/PrayerTimes" element={<PrayerTimes user={user} />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/ContactUs" element={<ContactUs />} />
+          <Route path="/Qibla" element={<Qibla />} />
+          <Route path="/FeedbackReview" element={<FeedbackReview />} />
+          <Route path="/Settings" element={<Settings user={user} />} />
+        </Routes>
       </div>
       <div className="Footer">
         <MobileNav user={user} />

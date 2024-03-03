@@ -3,10 +3,8 @@ import "./css/Qibla.css";
 
 export default function Qibla() {
   return (
-    <>
-      <div className="Main">
-        <h1>Coming Soon!</h1>
-      </div>
-    </>
+    <h1 className="centerxy" style={{ marginTop: "48%" }}>
+      Coming Soon!!
+    </h1>
   );
 }

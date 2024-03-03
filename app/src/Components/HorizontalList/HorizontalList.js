@@ -1,39 +1,53 @@
 import ListGroup from "react-bootstrap/ListGroup";
 import "./List.css";
-import React from "react";
+import { useState, useEffect } from "react";
 import { prayersCalc, dayCalc } from "prayer-timetable-lib";
 import TimeTable from "../../Others/TimeTable.json";
 import Settings from "../../Others/Settings.json";
 import format from "date-fns/format";
 import { getPrayerTimes, updatePrayerTime } from "../../db/dbFunctions";
 import { parseISO } from "date-fns";
-import DropDown from "../DropDown/DropDown";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import {
+  getIqamahTimes_localDB,
+  getNextIqamahUpdate_localDB,
+  getTimeFormat_localDb,
+  setIqamahTimes_localDb,
+  setTimeFormat_localDb,
+} from "../../db/local_db";
+import { businessName } from "../../info";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCaretRight,
+  faCaretLeft,
+  faY,
+} from "@fortawesome/free-solid-svg-icons";
 
 function HorizontalList(props) {
-  const [oneAPICall, setOneAPICall] = React.useState(null);
+  const [update, setUpdate] = useState(false);
 
-  const [timeFormat, setTimeFormat] = React.useState(
-    localStorage.getItem("timeFormat")
-  );
-  const [data, setData] = React.useState(null);
-  const [offsetTime, setOffsetTime] = React.useState(false);
+  const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
+  const [data, setData] = useState(getIqamahTimes_localDB());
+  const [offsetTime, setOffsetTime] = useState(false);
 
-  const [prayerToChange, setPrayerToChange] = React.useState({
+  const [prayerToChange, setPrayerToChange] = useState({
     Name: "",
     Time: "",
     Offset: "",
   });
-  const [prayersData, setPrayersData] = React.useState(
+  const [prayersData, setPrayersData] = useState(
     prayersCalc(TimeTable, Settings, false)
   );
-  const [prayersToShow, setPrayerToShow] = React.useState(
+
+  const [prayersToShow, setPrayerToShow] = useState(
     prayersData.isAfterIsha
       ? prayersData.prayers.tomorrow
       : prayersData.prayers.today
   );
-
+  const [timeLeftNextPrayer, setTimeLeftNextPrayer] = useState(
+    prayersData.countDown.duration
+  );
+  setInterval(updateTime, 1000);
   const setChangedTime = (e) => {
     if (offsetTime && prayerToChange.Name !== "Jummuah") {
       setPrayerToChange({
@@ -61,33 +75,40 @@ function HorizontalList(props) {
       }
     }
   };
-
-  function storeIqamahTimes(data) {
-    localStorage.setItem("IqamahTimes", JSON.stringify(data));
-  }
-
-  const storeTimeFormat = (data) => {
-    localStorage.setItem("timeFormat", data);
-    setTimeFormat(data);
-  };
-
+  // sets default time format
   if (!timeFormat) {
-    storeTimeFormat("12h");
+    setTimeFormat_localDb("12h");
+    setTimeFormat("12h");
   }
 
-  setInterval(updateTime, 1000);
+  /*   if (timeLeftNextPrayer <= 0) {
+    setPrayersData(prayersCalc(TimeTable, Settings, false));
+  }
+  useEffect(() => {
+    const id = setInterval(
+      () => setTimeLeftNextPrayer((oldCount) => oldCount - 1),
+      1000
+    ); 
 
-  React.useEffect(() => {
-    // localStorage.setItem("LastUpdate", new Date().getTime());
-    navigator.onLine
-      ? getPrayerTimes().then((result) => {
-          setData(result);
-          if (result !== null) storeIqamahTimes(result);
-        })
-      : localStorage.getItem("IqamahTimes") !== "undefined"
-      ? setData(JSON.parse(localStorage.getItem("IqamahTimes")))
-      : console.log("connect to inernect");
+    return () => {
+      clearInterval(id);
+    };
   }, []);
+*/
+  useEffect(() => {
+    let nextIqamahUpdate = new Date(getNextIqamahUpdate_localDB());
+
+    /*     if (data === null || (nextIqamahUpdate <= new Date() && navigator.onLine)) {
+     */ getPrayerTimes().then((result) => {
+      if (result !== null) {
+        setData(result);
+        setIqamahTimes_localDb(result);
+      }
+    });
+    /*  } else {
+      //no
+    } */
+  }, [update]);
 
   return (
     <>
@@ -96,7 +117,10 @@ function HorizontalList(props) {
           className={
             timeFormat === "24h" ? "selected TimeFormat24 " : "TimeFormat24"
           }
-          onClick={() => storeTimeFormat("24h")}
+          onClick={() => {
+            setTimeFormat_localDb("24h");
+            setTimeFormat("24h");
+          }}
         >
           24h
         </button>
@@ -104,7 +128,10 @@ function HorizontalList(props) {
           className={
             timeFormat === "12h" ? "selected TimeFormat12 " : "TimeFormat12"
           }
-          onClick={() => storeTimeFormat("12h")}
+          onClick={() => {
+            setTimeFormat_localDb("12h");
+            setTimeFormat("12h");
+          }}
         >
           12h
         </button>
@@ -121,6 +148,7 @@ function HorizontalList(props) {
             convertSecondsToHMS(prayersData.countDown.duration)}
         </ListGroup.Item>
       </ListGroup>
+
       <ListGroup horizontal>
         <ListGroup.Item className="ListPos">
           <strong>Prayer</strong>
@@ -132,6 +160,7 @@ function HorizontalList(props) {
           <strong>Iqamah</strong>
         </ListGroup.Item>
       </ListGroup>
+
       {prayersToShow.map((item, index) =>
         index < 6 ? (
           <ListGroup horizontal key={item.name}>
@@ -217,9 +246,15 @@ function HorizontalList(props) {
       <ListGroup horizontal>
         <ListGroup.Item
           onClick={() => {
-            prayerToChange.Name === "Jummuah" && props.user.userType === "Admin"
-              ? setPrayerToChange({ Name: "", Time: "" })
-              : setPrayerToChange({ Name: "Jummuah", Time: data[6].Iqamah });
+            if (
+              prayerToChange.Name === "Jummuah" &&
+              props.user.userType === "Admin"
+            ) {
+              setPrayerToChange({ Name: "", Time: "" });
+            } else {
+              setPrayerToChange({ Name: "Jummuah", Time: data[6].Iqamah });
+              setOffsetTime(data[6].Offset !== "" ? true : false);
+            }
           }}
           active={
             prayerToChange.Name === "Jummuah" && props.user.userType === "Admin"
@@ -238,6 +273,29 @@ function HorizontalList(props) {
           </strong>
         </ListGroup.Item>
       </ListGroup>
+      <ListGroup horizontal key={"nhnh"}>
+        {/* <ListGroup.Item onClick={() => setWhatPrayersToShow("Back")}>
+          <FontAwesomeIcon icon={faCaretLeft} style={{ fontSize: "25px" }} />
+        </ListGroup.Item> */}
+        <ListGroup.Item
+          className="blockSelection centerxy"
+          style={{ width: "100%" }}
+        >
+          {format(prayersToShow[2].time, "dd/MM/yyyy")}
+        </ListGroup.Item>
+        {/* <ListGroup.Item onClick={() => setWhatPrayersToShow("Next")}>
+          <FontAwesomeIcon icon={faCaretRight} style={{ fontSize: "25px" }} />
+        </ListGroup.Item> */}
+      </ListGroup>
+      {/* <p
+        style={{
+          display: showConnectMessage ? "none" : "",
+          color: "red",
+          textAlign: "center",
+        }}
+      >
+        Iqamah times are not up to date. Please connect to internet
+      </p> */}
       <div
         className="TimeChange"
         style={{ display: props.user.userType === "Admin" ? "" : "none" }}
@@ -258,6 +316,7 @@ function HorizontalList(props) {
               checked={offsetTime}
             />
           </Form>
+
           <input
             className="TimeInput"
             id="time"
@@ -274,11 +333,12 @@ function HorizontalList(props) {
                 prayerToChange.Time,
                 prayerToChange.Offset
               ).then((r) => {
-                if (r.message === true) {
+                if (r === true) {
                   setPrayerToChange({ Name: "", Time: "", Offset: "" });
                   setOffsetTime(false);
+                  setUpdate(!update);
                 } else {
-                  console.log(r);
+                  alert(r);
                 }
               });
             }}
@@ -286,30 +346,6 @@ function HorizontalList(props) {
             Set
           </button>
         </div>
-        {/* <div style={{ display: prayerToChange.Name === "" ? "none" : "" }}>
-          <input
-            className="TimeInput"
-            id="time"
-            maxLength={5}
-            placeholder="10:23"
-            value={prayerToChange.Time}
-            onChange={setChangedTime}
-          />
-          <button
-            className="TimeButton"
-            onClick={() => {
-              updatePrayerTime(prayerToChange.Name, prayerToChange.Time).then(
-                (r) => {
-                  if (r.message === true) {
-                    setPrayerToChange({ Name: "", Time: "" });
-                  }
-                }
-              );
-            }}
-          >
-            Set
-          </button>
-        </div> */}
       </div>
     </>
   );
@@ -326,13 +362,24 @@ function HorizontalList(props) {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 
-  function updateTime() {
-    setPrayersData(prayersCalc(TimeTable, Settings, false));
-    if (prayersData.isAfterIsha) {
+  function setWhatPrayersToShow(buttonPress) {
+    if (buttonPress === "Next" && prayersToShow === prayersData.prayers.today) {
       setPrayerToShow(prayersData.prayers.tomorrow);
-    } else {
+    } else if (
+      buttonPress === "Back" &&
+      prayersToShow === prayersData.prayers.today
+    ) {
+      setPrayerToShow(prayersData.prayers.yesterday);
+    } else if (
+      (buttonPress === "Back" &&
+        prayersToShow !== prayersData.prayers.yesterday) ||
+      (buttonPress === "Next" && prayersToShow !== prayersData.prayers.tomorrow)
+    ) {
       setPrayerToShow(prayersData.prayers.today);
     }
+  }
+  function updateTime() {
+    setPrayersData(prayersCalc(TimeTable, Settings, false));
   }
 }
 

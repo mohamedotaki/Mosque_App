@@ -1,8 +1,8 @@
 import DropDown from "../Components/DropDown/DropDown";
 import "./css/Settings.css";
 import ListGroup from "react-bootstrap/ListGroup";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { version } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 import {
   People,
@@ -10,58 +10,29 @@ import {
   BoxArrowRight,
   BoxArrowInRight,
 } from "react-bootstrap-icons";
-import { logout, login } from "../Fun/User";
+import { logout, login, compareVersionNumber } from "../Fun/User";
+import { appVersion } from "../info";
+import { getTimeFormat_localDb, setTimeFormat_localDb } from "../db/local_db";
 
 export default function Settings(props) {
-  const [defaultPage, setDefaultPage] = React.useState(
-    localStorage.getItem("defaultPage").substring(1)
-  );
-  const [timeFormat, setTimeFormat] = React.useState(
-    localStorage.getItem("timeFormat")
-  );
-  const defaultPageData = [
-    { name: "Home", value: "/Home" },
-    { name: "Prayer Times", value: "/PrayerTimes" },
-  ];
+  var timeFormat = getTimeFormat_localDb();
+
   const defaultTimeFormat = [
     { name: "24h", value: "24h" },
     { name: "12h", value: "12h" },
   ];
 
-  const storeDefaultPage = (data) => {
-    localStorage.setItem("defaultPage", data);
-  };
-
-  const storeTimeFormat = (data) => {
-    localStorage.setItem("timeFormat", data);
-  };
-
   const navigate = useNavigate();
 
   return (
     <div className="Settings">
-      {/*   <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">
-          <p>Dark Mode</p>
-        </ListGroup.Item>
-      </ListGroup> */}
-      {/*     <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">Default Page</ListGroup.Item>
-        <ListGroup.Item className="ListItem">
-          <DropDown
-            name={defaultPage}
-            data={defaultPageData}
-            results={storeDefaultPage}
-          />
-        </ListGroup.Item>
-      </ListGroup> */}
       <ListGroup horizontal>
         <ListGroup.Item className="ListItem">Time Format:</ListGroup.Item>
         <ListGroup.Item className="ListItem">
           <DropDown
             name={timeFormat ? timeFormat : "Select Format"}
             data={defaultTimeFormat}
-            results={storeTimeFormat}
+            results={(time) => setTimeFormat_localDb(time)}
           />
         </ListGroup.Item>
       </ListGroup>
@@ -100,7 +71,7 @@ export default function Settings(props) {
       <div className="ContactListDiv">
         <ListGroup>
           <ListGroup.Item className="ContactListItem">
-            <a href="About">
+            <Link to="/About">
               <People
                 style={{
                   color: "green",
@@ -109,10 +80,10 @@ export default function Settings(props) {
                 }}
               />
               About Us
-            </a>
+            </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item className="ContactListItem">
-            <a href="ContactUs">
+            <Link to="/ContactUs">
               <Telephone
                 style={{
                   color: "green",
@@ -121,7 +92,7 @@ export default function Settings(props) {
                 }}
               />
               Contact Us
-            </a>
+            </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item
             className="ContactListItem"
@@ -168,6 +139,7 @@ export default function Settings(props) {
             Feedback Review
           </ListGroup.Item>
         </ListGroup>
+        <strong>App Version: {appVersion}</strong>
       </div>
     </div>
   );

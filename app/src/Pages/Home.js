@@ -13,7 +13,6 @@ export default function Home(props) {
   const updatePosts = () => {
     getPosts().then((data) => {
       setPosts(data);
-      console.log(data);
     });
 
     setShowForm(false);

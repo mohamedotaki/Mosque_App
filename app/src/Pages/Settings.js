@@ -7,6 +7,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import {
   People,
   Telephone,
+  Chat,
   BoxArrowRight,
   BoxArrowInRight,
 } from "react-bootstrap-icons";
@@ -92,6 +93,18 @@ export default function Settings(props) {
                 }}
               />
               Contact Us
+            </Link>{" "}
+          </ListGroup.Item>
+          <ListGroup.Item className="ContactListItem">
+            <Link to="/Feedback">
+              <Chat
+                style={{
+                  color: "green",
+                  fontSize: "20px",
+                  marginRight: "20px",
+                }}
+              />
+              Feedback
             </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item

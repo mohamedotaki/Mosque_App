@@ -1,10 +1,7 @@
-import Admin from "../Admin/Admin";
 import "./Card.css";
 import CardEdit from "./CardEdit";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
-import Button from "react-bootstrap/Button";
 import { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
 import Confirm from "../Confirm/Confirm";
 import { deletePost } from "../../db/dbFunctions";
 import DOMPurify from "dompurify";

@@ -37,7 +37,6 @@ export default function CardEdit({
       });
     } else {
       addPost(title, contant).then((result) => {
-        console.log(result);
         if (result === true) {
           updateUser();
         } else {

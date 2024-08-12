@@ -1,7 +1,7 @@
 {
   "name": "app",
   "homepage": "https://mosqueapp.alotaki.com/",
-  "version": "0.1.9",
+  "version": "0.2.3",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -28,6 +28,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
+    "react-geolocated": "^4.1.2",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",

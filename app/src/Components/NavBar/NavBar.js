@@ -15,8 +15,6 @@ function BasicExample(prams) {
 
   const currentTap = useLocation().pathname;
 
-  console.log(currentTap);
-
   return (
     <nav className="NavPos">
       <div>

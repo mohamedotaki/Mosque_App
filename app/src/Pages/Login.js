@@ -13,7 +13,6 @@ export default function Login(props) {
   const handleSubmit = (event) => {
     event.preventDefault(); // 👈️ prevent page refresh
     login(email.current.value, password.current.value).then((res) => {
-      console.log(res);
       if (res.message) {
         localStorage.setItem(
           "user",

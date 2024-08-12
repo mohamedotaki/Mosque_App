@@ -13,10 +13,9 @@
     },
     "hijrioffset": "0",
     "join": "0",
-    "jummuahtime": [13,40],
+    "jummuahtime": [13,30],
     "taraweehtime": [23,15],
-    "jamaahmethods": ["beforenext","","fixed","afterthis","afterthis","fixed"],
-    "jamaahoffsets": [[0,30],[],[13,50],[0,15],[0,10],[22,58]],
+    "jamaahmethods": ["","","","","",""],
+    "jamaahoffsets": [[0,30],[],[13,50],[0,15],[0,10],[23,7]],
     "updated": 1514764800
   }
-  

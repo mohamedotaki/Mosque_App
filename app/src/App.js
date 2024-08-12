@@ -17,6 +17,7 @@ import FeedbackReview from "./Pages/FeedbackReview";
 import InstallButton from "./Components/InstallButton";
 import UpdateApp from "./Fun/UpdateApp";
 import { getUser_localDB, setUser_localDB } from "./db/local_db";
+import Feedback from "./Components/Feedback/Feedback";
 
 function App() {
   if (getUser_localDB() === null) {
@@ -24,7 +25,6 @@ function App() {
   }
 
   const user = getUser_localDB();
-  console.log(user);
   const [loggedin, setLoggedIn] = React.useState(user.isSignedIn);
 
   const updateUserState = () => {
@@ -66,6 +66,8 @@ function App() {
           <Route path="/About" element={<About />} />
           <Route path="/ContactUs" element={<ContactUs />} />
           <Route path="/Qibla" element={<Qibla />} />
+          <Route path="/Feedback" element={<Feedback />} />
+
           <Route path="/FeedbackReview" element={<FeedbackReview />} />
           <Route path="/Settings" element={<Settings user={user} />} />
         </Routes>

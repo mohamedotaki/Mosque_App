@@ -1,5 +1,5 @@
 import React, { useState, useEffect , useCallback } from 'react';
-import {prayersCalc} from "prayer-timetable-lib";
+import { prayersCalc} from "../../Fun/Prayers";
 import TimeTable from "../../Others/TimeTable.json";
 import Settings from "../../Others/Settings.json";
 import { getPrayerTimes } from "../../db/dbFunctions";
@@ -19,8 +19,7 @@ function PrayerTimesContent(props) {
   const [prayerToChange, setPrayerToChange] = useState({ Name: "", Time: "", Offset: "" });
   const [prayersData, setPrayersData] = useState(prayersCalc(TimeTable, Settings, false, undefined ,new Date()));
   const [selectedDate, setSelectedDate] = useState(new Date());
-  //const [dayCalcData, setDayCalc] = useState(dayCalc(5));
-  //console.log(dayCalcData);
+
   const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
 
   useEffect(() => {
@@ -118,17 +117,7 @@ function PrayerTimesContent(props) {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // Update prayersData based on the new date
-    //const updatedPrayersData = prayersCalc(TimeTable, Settings, false, date);
-    //setPrayersData(updatedPrayersData);
-    console.log(date);
-    //console.log(updatedPrayersData);
-    console.log(prayersData);
-    const date1 = new Date(2024, 0, 1); // January 1, 2024
-const date2 = new Date(2024, 5, 1); // June 1, 2024
-console.log("Date 1 prayers:", prayersCalc(TimeTable, Settings, false,undefined, date1));
-console.log("Date 2 prayers:", prayersCalc(TimeTable, Settings, false, date2));
-
+    setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, date));
   };
 
   return (

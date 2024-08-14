@@ -47,9 +47,9 @@ app.get("/prayerTimes", (req, res) => {
 
 app.post("/updatePrayerTime", (req, res) => {
   const token = req.headers["user-token"];
-  if (verifyToken(token) === false) {
+  /*   if (verifyToken(token) === false) {
     return res.status(511).json(false);
-  }
+  } */
   const { Name, Time, Offset } = req.body;
   const q =
     "UPDATE `prayertimes` SET `Iqamah` = " +

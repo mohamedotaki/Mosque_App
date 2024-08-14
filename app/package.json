@@ -25,6 +25,7 @@
     "react-bootstrap": "^2.9.0",
     "react-bootstrap-icons": "^1.10.3",
     "react-copy-to-clipboard": "^5.1.0",
+    "react-datepicker": "^7.3.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",

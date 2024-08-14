@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ListGroup from "react-bootstrap/ListGroup";
 
 function PrayerCountdown({ prayerData }) {
+  const [percentage, setPercentage] = useState(prayerData.percentage);
   const [countdown, setCountdown] = useState(prayerData.countDown.duration);
 
   useEffect(() => {
     const timer = setInterval(() => {
+      const totalDuration = prayerData.countUp.duration + prayerData.countDown.duration;
+      const elapsedTime = prayerData.countUp.duration + (prayerData.countDown.duration - countdown);
+      const percentageRaw = (elapsedTime / totalDuration) * 100;
+      setPercentage(Math.floor(percentageRaw * 100) / 100);
+      
       setCountdown(prevCountdown => {
         if (prevCountdown <= 0) {
           clearInterval(timer);
@@ -14,16 +20,16 @@ function PrayerCountdown({ prayerData }) {
         return prevCountdown - 1;
       });
     }, 1000);
-
+  
     return () => clearInterval(timer);
-  }, []);
+  }, [prayerData, countdown]);
 
   return (
     <ListGroup horizontal key={"Title"}>
       <ListGroup.Item
         className="Title"
         style={{
-          "--TimeLeft": prayerData.percentage + "%",
+          "--TimeLeft": percentage + "%",
         }}
       >
         {prayerData.next.name + " in " + convertSecondsToHMS(countdown)}

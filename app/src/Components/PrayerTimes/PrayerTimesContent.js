@@ -1,10 +1,10 @@
-import React, { useState, useEffect , useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { prayersCalc} from "../../Fun/Prayers";
 import TimeTable from "../../Others/TimeTable.json";
 import Settings from "../../Others/Settings.json";
 import { getPrayerTimes } from "../../db/dbFunctions";
-import {getTimeFormat_localDb, getIqamahTimes_localDB, setIqamahTimes_localDb } from "../../db/local_db";
-
+import {getTimeFormat_localDb, setIqamahTimes_localDb } from "../../db/local_db";
+import usePrayerTimes from './usePrayerTimes';
 import TimeFormatSelector from './TimeFormatSelector';
 import PrayerCountdown from './PrayerCountdown';
 import PrayerList from './PrayerList';
@@ -13,14 +13,14 @@ import DateDisplay from './DateDisplay';
 import IqamahTimeChanger from './IqamahTimeChanger';
 
 function PrayerTimesContent(props) {
-  const [update, setUpdate] = useState(false);
-  const [data, setData] = useState(getIqamahTimes_localDB());
+  const { data, setData, prayersData, setPrayersData, selectedDate, handleDateChange } = usePrayerTimes();
+  const [setUpdate] = useState(false);
   const [offsetTime, setOffsetTime] = useState(false);
   const [prayerToChange, setPrayerToChange] = useState({ Name: "", Time: "", Offset: "" });
-  const [prayersData, setPrayersData] = useState(prayersCalc(TimeTable, Settings, false, undefined ,new Date()));
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
   const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
+  const MemoizedPrayerList = memo(PrayerList);
+  const MemoizedJummuahInfo = memo(JummuahInfo);
+  const MemoizedDateDisplay = memo(DateDisplay);
 
   useEffect(() => {
     getPrayerTimes().then((result) => {
@@ -29,7 +29,7 @@ function PrayerTimesContent(props) {
         setIqamahTimes_localDb(result);
       }
     });
-  }, [update]);
+  }, [setData]);
 
   const handleTimeFormatChange = (format) => {
     setTimeFormat(format);
@@ -108,45 +108,29 @@ function PrayerTimesContent(props) {
 
     const updateTime = useCallback(() => {
       setPrayersData(prayersCalc(TimeTable, Settings, false, undefined,selectedDate));
-    },[selectedDate]);
+    },[selectedDate , setPrayersData]);
 
     useEffect(() => {
       const intervals = prayersData.countDown.duration * 1000;
       const timer = setInterval(updateTime, intervals);
       return () => clearInterval(timer);
-    }, [updateTime,prayersData.countDown.duration]);
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, date));
-  };
+    }, [updateTime,prayersData.countDown.duration, setPrayersData]);
 
   return (
     <>
       <TimeFormatSelector onTimeFormatChange={handleTimeFormatChange} />
-      <PrayerCountdown 
-        prayerData={prayersData}
+      <PrayerCountdown prayerData={prayersData}/>
+      <MemoizedPrayerList 
+      prayersToShow={prayersData.isAfterIsha ? prayersData.prayers.tomorrow : prayersData.prayers.today}
+      prayersData={prayersData}
+      data={data}
+      timeFormat={timeFormat}
+      onPrayerClick={handlePrayerClick}
+      userType={props.user.userType}
       />
-      <PrayerList 
-        prayersToShow={prayersData.isAfterIsha ? prayersData.prayers.tomorrow : prayersData.prayers.today}
-        prayersData={prayersData}
-        data={data}
-        timeFormat={timeFormat}
-        onPrayerClick={handlePrayerClick}
-        userType={props.user.userType}
-      />
-      <JummuahInfo 
-        data={data}
-        prayerToChange={prayerToChange}
-        userType={props.user.userType}
-        onJummuahClick={handleJummuahClick}
-      />
-      
-      <DateDisplay 
-        dateOfPrayers={selectedDate} 
-        onDateChange={handleDateChange}
-      />
-      
+      <MemoizedJummuahInfo data={data} prayerToChange={prayerToChange} userType={props.user.userType} onJummuahClick={handleJummuahClick} />
+      <MemoizedDateDisplay dateOfPrayers={selectedDate} onDateChange={handleDateChange} />
+
       <IqamahTimeChanger 
         userType={props.user.userType}
         prayerToChange={prayerToChange}

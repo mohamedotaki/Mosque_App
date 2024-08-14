@@ -107,13 +107,14 @@ function PrayerTimesContent(props) {
     };
 
     const updateTime = useCallback(() => {
-      setPrayersData(prayersCalc(TimeTable, Settings, false,undefined, selectedDate));
-    }, [selectedDate]);
+      setPrayersData(prayersCalc(TimeTable, Settings, false, undefined,selectedDate));
+    },[selectedDate]);
 
     useEffect(() => {
-      const timer = setInterval(updateTime, 1000);
+      const intervals = prayersData.countDown.duration * 1000;
+      const timer = setInterval(updateTime, intervals);
       return () => clearInterval(timer);
-    }, [updateTime]);
+    }, [updateTime,prayersData.countDown.duration]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -124,9 +125,7 @@ function PrayerTimesContent(props) {
     <>
       <TimeFormatSelector onTimeFormatChange={handleTimeFormatChange} />
       <PrayerCountdown 
-        nextPrayer={prayersData.next} 
-        countdownDuration={prayersData.countDown.duration}
-        percentage={prayersData.percentage}
+        prayerData={prayersData}
       />
       <PrayerList 
         prayersToShow={prayersData.isAfterIsha ? prayersData.prayers.tomorrow : prayersData.prayers.today}

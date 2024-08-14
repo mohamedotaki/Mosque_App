@@ -1,10 +1,10 @@
-import HorizontalList from "../Components/HorizontalList/HorizontalList";
+import PrayerTimesContent from "../Components/PrayerTimes/PrayerTimesContent";
 import React from "react";
 
 export default function PrayerTimes(props) {
   return (
     <>
-      <HorizontalList user={props.user} />
+      <PrayerTimesContent user={props.user} />
     </>
   );
 }

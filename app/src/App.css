@@ -93,3 +93,25 @@
 .textColor-secondary {
   color: var(--secondary) !important;
 }
+
+.fixed-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #000000b4;
+  z-index: 1021;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.fixed-inner {
+  max-width: 500px;
+  max-height: 600px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 15px;
+  padding: 10px;
+  overflow: auto;
+}

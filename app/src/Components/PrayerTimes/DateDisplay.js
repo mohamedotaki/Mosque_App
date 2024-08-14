@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import { format } from "date-fns";
 import DatePicker from "react-datepicker";
@@ -16,6 +16,9 @@ function DateDisplay({ dateOfPrayers, onDateChange }) {
     setShowCalendar(false);
     dateOfPrayers = date;
   };
+  const preventBubbling = (event) => {
+    event.stopPropagation();
+  };
 
   return (
     <ListGroup horizontal key={"nhnh"}>
@@ -27,11 +30,15 @@ function DateDisplay({ dateOfPrayers, onDateChange }) {
         {format(dateOfPrayers, "dd/MM/yyyy")}
       </ListGroup.Item>
       {showCalendar && (
-        <DatePicker
-          selected={dateOfPrayers}
-          onChange={handleDateChange}
-          inline
-        />
+        <div className="fixed-bg" onClick={() => setShowCalendar(false)}>
+          <div className="fixed-inner" onClick={preventBubbling}>
+            <DatePicker
+              selected={dateOfPrayers}
+              onChange={handleDateChange}
+              inline
+            />
+          </div>
+        </div>
       )}
     </ListGroup>
   );

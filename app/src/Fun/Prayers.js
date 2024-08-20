@@ -80,7 +80,7 @@ const prayerCalc = (
   /* *********************** */
   /* NAMES                   */
   /* *********************** */
-  const names = ['fajr', 'shurooq', 'dhuhr', 'asr', 'maghrib', 'isha'];
+  const names = ['Fajr', 'Shurooq', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
   const name = names[index];
   const hasPassed = isAfter(now, time);
   const isJamaahPending = isWithinInterval(now, { start: time, end: jtime });

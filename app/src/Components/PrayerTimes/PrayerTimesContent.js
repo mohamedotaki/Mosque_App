@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
-import { prayersCalc } from "../../Fun/Prayers";
-import TimeTable from "../../Others/TimeTable.json";
-import Settings from "../../Others/Settings.json";
-import { getPrayerTimes } from "../../db/dbFunctions";
+import React, { useState, useEffect } from "react";
 import {
   getTimeFormat_localDb,
-  setIqamahTimes_localDb,
 } from "../../db/local_db";
 import usePrayerTimes from "./usePrayerTimes";
 import TimeFormatSelector from "./TimeFormatSelector";
@@ -23,8 +18,9 @@ function PrayerTimesContent(props) {
     setPrayersData,
     selectedDate,
     handleDateChange,
+    handleCountdownZero,
   } = usePrayerTimes();
-  const [update, setUpdate] = useState(false);
+  //const [update, setUpdate] = useState(false);
   const [offsetTime, setOffsetTime] = useState(false);
   const [prayerToChange, setPrayerToChange] = useState({
     Name: "",
@@ -32,18 +28,6 @@ function PrayerTimesContent(props) {
     Offset: "",
   });
   const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
-  const MemoizedPrayerList = memo(PrayerList);
-  const MemoizedJummuahInfo = memo(JummuahInfo);
-  const MemoizedDateDisplay = memo(DateDisplay);
-
-  useEffect(() => {
-    getPrayerTimes().then((result) => {
-      if (result !== null) {
-        setData(result);
-        setIqamahTimes_localDb(result);
-      }
-    });
-  }, [update]);
 
   const handleTimeFormatChange = (format) => {
     setTimeFormat(format);
@@ -116,23 +100,11 @@ function PrayerTimesContent(props) {
     }
   };
 
-  const updateTime = useCallback(() => {
-    setPrayersData(
-      prayersCalc(TimeTable, Settings, false, undefined, selectedDate)
-    );
-  }, [selectedDate, setPrayersData]);
-
-  useEffect(() => {
-    const intervals = prayersData.countDown.duration * 1000;
-    const timer = setInterval(updateTime, intervals);
-    return () => clearInterval(timer);
-  }, [updateTime, prayersData.countDown.duration, setPrayersData]);
-
   return (
     <>
       <TimeFormatSelector onTimeFormatChange={handleTimeFormatChange} />
-      <PrayerCountdown prayerData={prayersData} />
-      <MemoizedPrayerList
+      <PrayerCountdown prayerData={prayersData} handleCountDownZero={handleCountdownZero} />
+      <PrayerList
         prayersToShow={
           prayersData.isAfterIsha
             ? prayersData.prayers.tomorrow
@@ -144,13 +116,13 @@ function PrayerTimesContent(props) {
         onPrayerClick={handlePrayerClick}
         userType={props.user.userType}
       />
-      <MemoizedJummuahInfo
+      <JummuahInfo
         data={data}
         prayerToChange={prayerToChange}
         userType={props.user.userType}
         onJummuahClick={handleJummuahClick}
       />
-      <MemoizedDateDisplay
+      <DateDisplay
         dateOfPrayers={selectedDate}
         onDateChange={handleDateChange}
       />
@@ -161,7 +133,7 @@ function PrayerTimesContent(props) {
         offsetTime={offsetTime}
         setOffsetTime={setOffsetTime}
         setChangedTime={setChangedTime}
-        setUpdate={setUpdate}
+        setUpdate={setData}
       />
     </>
   );

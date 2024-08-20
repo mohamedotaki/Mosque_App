@@ -34,7 +34,16 @@ function usePrayerTimes() {
     setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, date));
   };
 
-  return { data, setData, prayersData, setPrayersData, selectedDate, handleDateChange };
+  const handleCountdownZero = () => {
+    if(selectedDate.getDay() === new Date().getDay() && selectedDate.getMonth() === new Date().getMonth())
+      {
+        handleDateChange(new Date());
+      } else {
+      handleDateChange( selectedDate);
+  };
+}
+
+  return { data, setData, prayersData, setPrayersData, selectedDate, handleDateChange , handleCountdownZero};
 }
 
 export default usePrayerTimes;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   getTimeFormat_localDb,
 } from "../../db/local_db";
@@ -15,12 +15,10 @@ function PrayerTimesContent(props) {
     data,
     setData,
     prayersData,
-    setPrayersData,
     selectedDate,
     handleDateChange,
-    handleCountdownZero,
+    handleCountdownRefresh,
   } = usePrayerTimes();
-  //const [update, setUpdate] = useState(false);
   const [offsetTime, setOffsetTime] = useState(false);
   const [prayerToChange, setPrayerToChange] = useState({
     Name: "",
@@ -103,7 +101,7 @@ function PrayerTimesContent(props) {
   return (
     <>
       <TimeFormatSelector onTimeFormatChange={handleTimeFormatChange} />
-      <PrayerCountdown prayerData={prayersData} handleCountDownZero={handleCountdownZero} />
+      <PrayerCountdown prayerData={prayersData} handleCountDownZero={handleCountdownRefresh} />
       <PrayerList
         prayersToShow={
           prayersData.isAfterIsha

@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 function DateDisplay({ dateOfPrayers, onDateChange }) {
   const [showCalendar, setShowCalendar] = useState(false);
-
+  console.log("showCalendar");
   const handleDateClick = () => {
     setShowCalendar(!showCalendar);
   };
@@ -19,15 +19,25 @@ function DateDisplay({ dateOfPrayers, onDateChange }) {
   const preventBubbling = (event) => {
     event.stopPropagation();
   };
-
   return (
-    <ListGroup horizontal key={"nhnh"}>
+    <ListGroup key={"nhnh"}>
       <ListGroup.Item
         className="blockSelection centerxy"
         style={{ width: "100%", cursor: "pointer" }}
         onClick={handleDateClick}
       >
-        {format(dateOfPrayers, "dd/MM/yyyy")}
+        {format(dateOfPrayers, "dd/MMMM/yyyy")}
+      </ListGroup.Item>
+      <ListGroup.Item
+        className="blockSelection centerxy"
+        style={{ width: "100%" }}
+      >
+        {new Intl.DateTimeFormat("ar-TN-u-ca-islamic", {
+          day: "numeric",
+          month: "long",
+          weekday: "long",
+          year: "numeric",
+        }).format(new Date(dateOfPrayers))}
       </ListGroup.Item>
       {showCalendar && (
         <div className="fixed-bg" onClick={() => setShowCalendar(false)}>

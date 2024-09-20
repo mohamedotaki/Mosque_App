@@ -1,28 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 
-function PrayerCountdown({ prayerData, handleCountDownZero }) {
+function PrayerCountdown({ prayerData }) {
   const [percentage, setPercentage] = useState(0);
   const [countdown, setCountdown] = useState(prayerData.countDown.duration);
 
   const UpdatePercentage = useCallback(() => {
-    const totalDuration = prayerData.countUp.duration + prayerData.countDown.duration;
-    const elapsedTime = prayerData.countUp.duration + (prayerData.countDown.duration - countdown);
+    const totalDuration =
+      prayerData.countUp.duration + prayerData.countDown.duration;
+    const elapsedTime =
+      prayerData.countUp.duration + (prayerData.countDown.duration - countdown);
     const newPercentage = (elapsedTime / totalDuration) * 100;
     setPercentage(Math.floor(newPercentage * 100) / 100);
   }, [prayerData, countdown]);
 
   const updateCountdown = useCallback(() => {
     UpdatePercentage();
-    handleCountDownZero();
-    if (countdown <= 0) {
-      setCountdown(prayerData.countDown.duration);
-    }
-    setCountdown(prevCountdown => {
+    setCountdown((prevCountdown) => {
       if (prevCountdown <= 0) return 0;
       return prevCountdown - 1;
     });
-  }, [UpdatePercentage, countdown, handleCountDownZero, prayerData]);
+  }, [UpdatePercentage]);
+
+  useEffect(() => {
+    prayerData && setCountdown(prayerData.countDown.duration);
+  }, [prayerData]);
 
   useEffect(() => {
     const timer = setInterval(updateCountdown, 1000);

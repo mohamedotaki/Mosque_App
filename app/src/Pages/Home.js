@@ -5,6 +5,7 @@ import Card from "../Components/Card/Card";
 import { Plus, Dash } from "react-bootstrap-icons";
 import CardEdit from "../Components/Card/CardEdit";
 import { getPosts } from "../db/dbFunctions";
+import TimeEditor from "../Components/PrayerTimes/TimeEditor";
 
 export default function Home(props) {
   const [posts, setPosts] = React.useState(null);

@@ -18,6 +18,7 @@ import InstallButton from "./Components/InstallButton";
 import UpdateApp from "./Fun/UpdateApp";
 import { getUser_localDB, setUser_localDB } from "./db/local_db";
 import Feedback from "./Components/Feedback/Feedback";
+import TimeEditor from "./Components/PrayerTimes/TimeEditor";
 
 function App() {
   if (getUser_localDB() === null) {
@@ -38,7 +39,7 @@ function App() {
       <div className="Header">
         <NavBar user={user} />
         <div className="Donation">
-          <strong>Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D</strong>
+          <strong>Donation IBAN: IE28AIBK93744421240194</strong>
 
           <InstallButton></InstallButton>
         </div>

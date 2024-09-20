@@ -29,12 +29,18 @@ function setIqamahTimes_localDb(data) {
   d.setHours(13, 0, 0);
   localStorage.setItem("NextIqamahUpdate", d);
 }
+function setAdhanTimes_localDb(data) {
+  localStorage.setItem("AdhanTimes", JSON.stringify(data));
+}
 function getNextIqamahUpdate_localDB() {
   return localStorage.getItem("NextIqamahUpdate");
 }
 
 function getIqamahTimes_localDB() {
   return JSON.parse(localStorage.getItem("IqamahTimes"));
+}
+function getAdhanTimes_localDB() {
+  return JSON.parse(localStorage.getItem("AdhanTimes"));
 }
 
 function setTimeFormat_localDb(data) {
@@ -62,4 +68,6 @@ export {
   getNextIqamahUpdate_localDB,
   setAppVersion_localDb,
   getAppVersion_localDb,
+  setAdhanTimes_localDb,
+  getAdhanTimes_localDB,
 };

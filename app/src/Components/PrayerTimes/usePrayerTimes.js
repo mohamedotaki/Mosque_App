@@ -1,13 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import { prayersCalc } from "../../Fun/Prayers";
 import TimeTable from "../../Others/TimeTable.json";
 import Settings from "../../Others/Settings.json";
 import { getPrayerTimes } from "../../db/dbFunctions";
-import { getIqamahTimes_localDB, setIqamahTimes_localDb } from "../../db/local_db";
+import {
+  getIqamahTimes_localDB,
+  setIqamahTimes_localDb,
+} from "../../db/local_db";
 
 function usePrayerTimes() {
   const [data, setData] = useState(getIqamahTimes_localDB());
-  const [prayersData, setPrayersData] = useState(prayersCalc(TimeTable, Settings, false, undefined, new Date()));
+  const [prayersData, setPrayersData] = useState(
+    prayersCalc(TimeTable, Settings, false, undefined, new Date())
+  );
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
@@ -20,7 +25,12 @@ function usePrayerTimes() {
   }, []);
 
   const updateTime = useCallback(() => {
-    setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, selectedDate));
+    const isAfterIsha = prayersData.countDown.name === "Isha";
+    let nowDate = new Date();
+    if (isAfterIsha) {
+      nowDate.setDate(nowDate.getDate() + 1);
+    }
+    setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, nowDate));
   }, [selectedDate]);
 
   useEffect(() => {
@@ -35,15 +45,25 @@ function usePrayerTimes() {
   };
 
   const handleCountdownRefresh = () => {
-    if(selectedDate.getDay() === new Date().getDay() && selectedDate.getMonth() === new Date().getMonth())
-      {
-        handleDateChange(new Date());
-      } else {
-      handleDateChange( selectedDate);
+    if (
+      selectedDate.getDay() === new Date().getDay() &&
+      selectedDate.getMonth() === new Date().getMonth()
+    ) {
+      handleDateChange(new Date());
+    } else {
+      handleDateChange(selectedDate);
+    }
   };
-}
 
-  return { data, setData, prayersData, setPrayersData, selectedDate, handleDateChange , handleCountdownRefresh};
+  return {
+    data,
+    setData,
+    prayersData,
+    setPrayersData,
+    selectedDate,
+    handleDateChange,
+    handleCountdownRefresh,
+  };
 }
 
 export default usePrayerTimes;

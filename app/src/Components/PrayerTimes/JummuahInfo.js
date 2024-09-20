@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 
-function JummuahInfo({ data = [], prayerToChange = {}, userType, onJummuahClick }) {
+function JummuahInfo({
+  data = [],
+  prayerToChange = {},
+  userType,
+  onJummuahClick,
+}) {
   const getJummuahTime = () => {
     try {
       if (data && data[6] && data[6].Iqamah) {
@@ -18,7 +23,6 @@ function JummuahInfo({ data = [], prayerToChange = {}, userType, onJummuahClick 
     <ListGroup horizontal>
       <ListGroup.Item
         onClick={onJummuahClick}
-        active={prayerToChange.Name === "Jummuah"}
         style={{
           width: "100%",
           textAlign: "center",
@@ -26,9 +30,7 @@ function JummuahInfo({ data = [], prayerToChange = {}, userType, onJummuahClick 
           minWidth: "300px",
         }}
       >
-        <strong>
-          Jummuah prayer is fixed at {getJummuahTime()}
-        </strong>
+        <strong>Jummuah prayer is fixed at {getJummuahTime()}</strong>
       </ListGroup.Item>
     </ListGroup>
   );

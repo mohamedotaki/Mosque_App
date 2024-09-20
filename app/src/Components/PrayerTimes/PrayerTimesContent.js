@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import {
-  getTimeFormat_localDb,
-} from "../../db/local_db";
+import { getTimeFormat_localDb } from "../../db/local_db";
 import usePrayerTimes from "./usePrayerTimes";
 import TimeFormatSelector from "./TimeFormatSelector";
 import PrayerCountdown from "./PrayerCountdown";
@@ -9,6 +7,8 @@ import PrayerList from "./PrayerList";
 import JummuahInfo from "./JummuahInfo";
 import DateDisplay from "./DateDisplay";
 import IqamahTimeChanger from "./IqamahTimeChanger";
+import { addMonths } from "date-fns";
+import TimeEditor from "./TimeEditor";
 
 function PrayerTimesContent(props) {
   const {
@@ -19,32 +19,26 @@ function PrayerTimesContent(props) {
     handleDateChange,
     handleCountdownRefresh,
   } = usePrayerTimes();
-  const [offsetTime, setOffsetTime] = useState(false);
-  const [prayerToChange, setPrayerToChange] = useState({
-    Name: "",
-    Time: "",
-    Offset: "",
-  });
+  const [prayerToChange, setPrayerToChange] = useState(null);
   const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
-
   const handleTimeFormatChange = (format) => {
     setTimeFormat(format);
   };
 
-  const handlePrayerClick = (item, index) => {
+  console.log(prayersData);
+  const handlePrayerClick = (item, index, adhan) => {
     if (props.user.userType !== "Admin") {
       return;
     }
-    if (!item.name.includes("shurooq")) {
+    if (!item.name.includes("Shurooq")) {
       if (navigator.onLine) {
-        setOffsetTime(data[index].Offset !== "" ? true : false);
-        prayerToChange.Name === item.name
-          ? setPrayerToChange({ Name: "", Time: "", Offset: 0 })
-          : setPrayerToChange({
-              Name: item.name,
-              Time: data[index].Iqamah,
-              Offset: data[index].Offset,
-            });
+        setPrayerToChange({
+          Name: item.name,
+          Time: adhan ? item.time : data[index].Iqamah,
+          Offset: data[index].Offset,
+          adhan: adhan,
+          OffsetTime: data[index].Offset !== "" && !adhan,
+        });
       } else {
         alert(
           "You are offline. Please connect to the internet to change Iqamah times."
@@ -54,54 +48,24 @@ function PrayerTimesContent(props) {
       alert("You can't change Shurooq time.");
     }
   };
-
   const handleJummuahClick = () => {
     if (!props.user.userType.includes("Admin")) {
       return;
     }
-    if (
-      prayerToChange.Name.includes("Jummuah") &&
-      props.user.userType === "Admin"
-    ) {
-      setPrayerToChange({ Name: "", Time: "" });
-    } else {
-      setPrayerToChange({ Name: "Jummuah", Time: data[6].Iqamah });
-      setOffsetTime(data[6].Offset !== "" ? true : false);
-    }
+    setPrayerToChange({
+      Name: "Jummuah",
+      Time: data[6].Iqamah,
+      adhan: false,
+      OffsetTime: data[6].Offset !== "",
+    });
   };
-
-  const setChangedTime = (e) => {
-    if (offsetTime && !prayerToChange.Name.includes("Jummuah")) {
-      setPrayerToChange({
-        Name: prayerToChange.Name,
-        Time: "",
-        Offset: e.target.value,
-      });
-    } else {
-      if (
-        e.target.value.length === 2 &&
-        e.nativeEvent.inputType !== "deleteContentBackward" &&
-        !offsetTime
-      ) {
-        setPrayerToChange({
-          Name: prayerToChange.Name,
-          Time: e.target.value + ":",
-          Offset: "",
-        });
-      } else {
-        setPrayerToChange({
-          Name: prayerToChange.Name,
-          Time: e.target.value,
-          Offset: "",
-        });
-      }
-    }
-  };
-
   return (
     <>
       <TimeFormatSelector onTimeFormatChange={handleTimeFormatChange} />
-      <PrayerCountdown prayerData={prayersData} handleCountDownZero={handleCountdownRefresh} />
+      <PrayerCountdown
+        prayerData={prayersData}
+        handleCountDownZero={handleCountdownRefresh}
+      />
       <PrayerList
         prayersToShow={
           prayersData.isAfterIsha
@@ -125,14 +89,21 @@ function PrayerTimesContent(props) {
         onDateChange={handleDateChange}
       />
 
-      <IqamahTimeChanger
+      {prayerToChange && (
+        <TimeEditor
+          prayerToEdit={prayerToChange}
+          setShowEditor={setPrayerToChange}
+          userType={props.user.userType}
+        />
+      )}
+
+      {/*      <IqamahTimeChanger
         userType={props.user.userType}
         prayerToChange={prayerToChange}
         offsetTime={offsetTime}
         setOffsetTime={setOffsetTime}
-        setChangedTime={setChangedTime}
         setUpdate={setData}
-      />
+      /> */}
     </>
   );
 }

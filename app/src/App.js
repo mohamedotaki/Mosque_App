@@ -38,7 +38,7 @@ function App() {
       <div className="Header">
         <NavBar user={user} />
         <div className="Donation">
-          <strong>Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D</strong>
+          <strong>Donation IBAN: IE28AIBK93744421240194</strong>
 
           <InstallButton></InstallButton>
         </div>

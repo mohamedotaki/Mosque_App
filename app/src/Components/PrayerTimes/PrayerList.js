@@ -1,9 +1,54 @@
-import React from 'react';
+import React from "react";
 import "./List.css";
 import ListGroup from "react-bootstrap/ListGroup";
 import { format, parseISO } from "date-fns";
+import usePrayerTimes from "./usePrayerTimes";
 
-function PrayerList({ prayersToShow, prayersData, data, timeFormat, onPrayerClick, userType }) {
+function PrayerList({
+  prayersToShow = [],
+  prayersData = {},
+  timeFormat = "24h",
+  onPrayerClick,
+}) {
+  const formatTime = (time, currentFormat) => {
+    try {
+      return format(time, currentFormat === "24h" ? "HH:mm" : "hh:mm");
+    } catch (error) {
+      console.error("Error formatting time:", error);
+      return "Error";
+    }
+  };
+  const { setData } = usePrayerTimes();
+  /*   const getIqamahTime = (item, index) => {
+    try {
+      if (data[index]?.Name !== "Shurooq") {
+        if (data[index]?.Iqamah) {
+          return formatTime(
+            parseISO(`2014-02-11T${data[index].Iqamah}:30`),
+            timeFormat
+          );
+        } else if (data[index]?.Offset) {
+          const offsetTime = new Date(item.time);
+          offsetTime.setMinutes(
+            offsetTime.getMinutes() + parseInt(data[index].Offset)
+          );
+          return formatTime(offsetTime, timeFormat);
+        }
+      }
+      if (!data) {
+        console.log("data is null");
+        getPrayerTimes().then((data) => {
+          if (data) {
+            setData(data);
+          }
+        });
+      }
+      return "N/A";
+    } catch (error) {
+      console.error("Error calculating Iqamah time:", error);
+      return "Error";
+    }
+  }; */
   return (
     <>
       <ListGroup horizontal>
@@ -17,51 +62,38 @@ function PrayerList({ prayersToShow, prayersData, data, timeFormat, onPrayerClic
           <strong>Iqamah</strong>
         </ListGroup.Item>
       </ListGroup>
-
-      {prayersToShow.map((item, index) =>
-        index < 6 && (
-          <ListGroup horizontal key={item.name}>
-            <ListGroup.Item
-              className={
-                "ListPos"
-              }
-            >
-              {item.name[0].toUpperCase() + item.name.slice(1)}
-            </ListGroup.Item>
-            <ListGroup.Item className={"TimePos"}>
-              {format(
-                prayersToShow[index].time,
-                timeFormat === "24h" ? "HH:mm" : "hh:mm"
-              )}
-            </ListGroup.Item>
-            <ListGroup.Item
-              className={
-                item.name.toUpperCase() ===
-                prayersData.current.name.toUpperCase()
-                  ? "TimePos "
-                  : "TimePos"
-              }
-              type="input"
-              onClick={() => onPrayerClick(item, index)}
-            >
-              {data != null
-                ? data[index].Name !== "Shurooq"
-                  ? data[index].Iqamah !== ""
-                    ? format(
-                        parseISO("2014-02-11T" + data[index].Iqamah + ":30"),
-                        timeFormat === "24h" ? "HH:mm" : "hh:mm"
-                      )
-                    : format(
-                        new Date(item.time).setMinutes(
-                          item.time.getMinutes() + parseInt(data[index].Offset)
-                        ),
-                        timeFormat === "24h" ? "HH:mm" : "hh:mm"
-                      )
-                  : "N/A"
-                : ""}
-            </ListGroup.Item>
-          </ListGroup>
-        )
+      {prayersToShow.map(
+        (item, index) =>
+          index < 6 && (
+            <ListGroup horizontal key={item.name}>
+              <ListGroup.Item className="ListPos">{item.name}</ListGroup.Item>
+              <ListGroup.Item
+                className="TimePos"
+                onClick={() =>
+                  onPrayerClick(
+                    { ...item, time: formatTime(item.time, timeFormat) },
+                    index,
+                    true
+                  )
+                }
+              >
+                {formatTime(item.time, timeFormat)}
+              </ListGroup.Item>
+              <ListGroup.Item
+                className={
+                  item.name === prayersData.current?.name
+                    ? "TimePos current-prayer"
+                    : "TimePos"
+                }
+                type="input"
+                onClick={() => onPrayerClick(item, index, false)}
+              >
+                {item.name === "Shurooq"
+                  ? "N/A"
+                  : formatTime(item.jtime, timeFormat)}
+              </ListGroup.Item>
+            </ListGroup>
+          )
       )}
     </>
   );

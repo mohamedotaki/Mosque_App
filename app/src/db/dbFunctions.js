@@ -4,8 +4,8 @@ import Alert from "react-bootstrap/Alert";
 const user = getUser_localDB();
 
 function apiLink(link) {
-  //var api = "https://mosqueapp.api.alotaki.com/";
-  var api = "http://localhost:3001/";
+  var api = "https://mosqueapp.api.alotaki.com/";
+  //var api = "http://localhost:3001/";
   return api + link;
 }
 //Login
@@ -142,6 +142,26 @@ async function updatePrayerTime(name, time, offset) {
   }
 }
 
+async function updateAdhanTime(name, time, offset) {
+  try {
+    const response = await fetch(apiLink("updateAdhanTime"), {
+      method: "POST",
+      headers: {
+        "user-Token": user.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Name: name,
+        Time: time,
+        Offset: offset,
+      }),
+    });
+    return checkResponseStatus(response.status);
+  } catch (error) {
+    return checkResponseStatus(503);
+  }
+}
+
 async function addfeedback(name, email, feedback) {
   try {
     const response = await fetch(apiLink("addfeedback"), {
@@ -215,4 +235,5 @@ export {
   addfeedback,
   getFeedbacks,
   getAppVersion,
+  updateAdhanTime,
 };

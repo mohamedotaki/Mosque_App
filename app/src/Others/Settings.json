@@ -1,7 +1,7 @@
 {
     "title": "Islamic Centre",
     "description": "Prayer Timetable",
-    "online": true,
+    "online": false,
     "url": {
         "settings": "https://ensar.me/api/settings/",
         "timetable": "https://ensar.me/api/timetable/"
@@ -16,6 +16,6 @@
     "jummuahtime": [13,30],
     "taraweehtime": [23,15],
     "jamaahmethods": ["","","","","",""],
-    "jamaahoffsets": [[0,30],[],[13,50],[0,15],[0,10],[23,7]],
+    "jamaahoffsets": [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
     "updated": 1514764800
   }

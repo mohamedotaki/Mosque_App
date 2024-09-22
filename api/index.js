@@ -65,6 +65,24 @@ app.post("/updatePrayerTime", (req, res) => {
   });
 });
 
+app.post("/updateAdhanTime", (req, res) => {
+  const token = req.headers["user-token"];
+  /*   if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  } */
+  const { Name, Time } = req.body;
+  const q =
+    "UPDATE `prayertimes` SET `Adhan` = " +
+    mysql.escape(Time) +
+    "WHERE `prayertimes`.`Name` = " +
+    mysql.escape(Name);
+
+  db.query(q, (err) => {
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
+  });
+});
+
 ////////////Feedback Functions////////////
 app.post("/deletefeedback", (req, res) => {
   const { id } = req.body;

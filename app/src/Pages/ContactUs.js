@@ -15,7 +15,7 @@ export default function ContactUs() {
             <TelephoneFill color="Green" style={{ marginRight: "10px" }} />
             Call Us
           </h4>
-          <a href="tel:0923232323">+353 92 323 2323</a>
+          <a>+353</a>
         </div>
         <div className="ContactUsElements">
           <h4>

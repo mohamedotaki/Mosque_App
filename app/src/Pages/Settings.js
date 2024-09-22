@@ -22,6 +22,10 @@ export default function Settings(props) {
     { name: "24h", value: "24h" },
     { name: "12h", value: "12h" },
   ];
+  const languageData = [
+    { name: "English", value: "English" },
+    { name: "العربية", value: "العربية" },
+  ];
 
   const navigate = useNavigate();
 
@@ -37,6 +41,18 @@ export default function Settings(props) {
           />
         </ListGroup.Item>
       </ListGroup>
+
+      <ListGroup horizontal>
+        <ListGroup.Item className="ListItem">Language:</ListGroup.Item>
+        <ListGroup.Item className="ListItem">
+          <DropDown
+            name={timeFormat ? timeFormat : "Select Format"}
+            data={languageData}
+            results={(time) => setTimeFormat_localDb(time)}
+          />
+        </ListGroup.Item>
+      </ListGroup>
+
       {/*       <ListGroup horizontal>
         <ListGroup.Item className="ListItem">Language</ListGroup.Item>
         <ListGroup.Item className="ListItem">

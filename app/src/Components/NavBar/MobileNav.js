@@ -9,6 +9,7 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function MobileNav(prams) {
   const [currentBT, setCurrentBT] = React.useState(window.location.href);
@@ -18,6 +19,7 @@ function MobileNav(prams) {
     { name: "Qibla", icon: faCompass, link: "/Qibla" },
     { name: "Settings", icon: faGear, link: "/Settings" },
   ];
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     setCurrentBT(window.location.href);
@@ -35,7 +37,7 @@ function MobileNav(prams) {
           className={currentTap === item.link ? "Buttons Selected" : "Buttons"}
         >
           <FontAwesomeIcon icon={item.icon} style={{ fontSize: "25px" }} />
-          {item.name}
+          {t(item.name)}
         </Link>
       ))}
     </nav>

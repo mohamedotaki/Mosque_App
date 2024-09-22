@@ -38,6 +38,7 @@ app.get("/appVersion", (req, res) => {
 
 ////////////Prayer Times//////////////////
 app.get("/prayerTimes", (req, res) => {
+  console.log("getting data");
   const q = "SELECT * FROM prayertimes";
   db.query(q, (err, data) => {
     if (err) return res.json(err);

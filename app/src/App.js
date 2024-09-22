@@ -18,11 +18,15 @@ import InstallButton from "./Components/InstallButton";
 import UpdateApp from "./Fun/UpdateApp";
 import { getUser_localDB, setUser_localDB } from "./db/local_db";
 import Feedback from "./Components/Feedback/Feedback";
+import i18n from "./translation/i18n";
+
+import { useTranslation } from "react-i18next";
 
 function App() {
   if (getUser_localDB() === null) {
     setUser_localDB();
   }
+  const { t } = useTranslation();
 
   const user = getUser_localDB();
   const [loggedin, setLoggedIn] = React.useState(user.isSignedIn);
@@ -38,7 +42,9 @@ function App() {
       <div className="Header">
         <NavBar user={user} />
         <div className="Donation">
-          <strong>Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D</strong>
+          <strong>
+            {t("welcome")}Donation IBAN: IE28AIBK93744421240194 BIC: AIBKIE2D
+          </strong>
 
           <InstallButton></InstallButton>
         </div>

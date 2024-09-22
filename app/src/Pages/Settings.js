@@ -1,8 +1,9 @@
 import DropDown from "../Components/DropDown/DropDown";
 import "./css/Settings.css";
 import ListGroup from "react-bootstrap/ListGroup";
-import React, { version } from "react";
+import React, { version, useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   People,
@@ -13,21 +14,35 @@ import {
 } from "react-bootstrap-icons";
 import { logout, login, compareVersionNumber } from "../Fun/User";
 import { appVersion } from "../info";
-import { getTimeFormat_localDb, setTimeFormat_localDb } from "../db/local_db";
+import {
+  getTimeFormat_localDb,
+  setLang,
+  setTimeFormat_localDb,
+} from "../db/local_db";
+import LanguageSwitcher from "../translation/LanguageSwitcher";
+import { getLang } from "../db/local_db";
 
 export default function Settings(props) {
   var timeFormat = getTimeFormat_localDb();
+  const [language, setLanguage] = useState(getLang());
 
   const defaultTimeFormat = [
     { name: "24h", value: "24h" },
     { name: "12h", value: "12h" },
   ];
+
   const languageData = [
-    { name: "English", value: "English" },
-    { name: "العربية", value: "العربية" },
+    { name: "English", value: "en" },
+    { name: "العربية", value: "ar" },
   ];
 
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    setLang(language);
+    i18n.changeLanguage(language);
+  }, [language]);
 
   return (
     <div className="Settings">
@@ -41,49 +56,18 @@ export default function Settings(props) {
           />
         </ListGroup.Item>
       </ListGroup>
-
       <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">Language:</ListGroup.Item>
+        <ListGroup.Item className="ListItem">Language</ListGroup.Item>
         <ListGroup.Item className="ListItem">
           <DropDown
-            name={timeFormat ? timeFormat : "Select Format"}
+            name={languageData.map(
+              (item) => item.value === language && item.name
+            )}
             data={languageData}
-            results={(time) => setTimeFormat_localDb(time)}
+            results={(e) => setLanguage(e)}
           />
         </ListGroup.Item>
       </ListGroup>
-
-      {/*       <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">Language</ListGroup.Item>
-        <ListGroup.Item className="ListItem">
-          <DropDown name={"English"} data={languageData} results={""} />
-        </ListGroup.Item>
-      </ListGroup> */}
-
-      {/*  <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">
-          <p>Language</p>
-        </ListGroup.Item>
-
-        <ListGroup.Item className="ListItem">
-          <DropDown name="button" item1="English" item2="Arabic" />
-        </ListGroup.Item>
-      </ListGroup>
-
-      <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">
-          <p>Time Format</p>
-        </ListGroup.Item>
-        <ListGroup.Item className="ListItem">
-          <Form>
-            <Form.Check // prettier-ignore
-              type="switch"
-              id="custom-switch"
-              label="24h"
-            />
-          </Form>
-        </ListGroup.Item>
-      </ListGroup> */}
 
       <div className="ContactListDiv">
         <ListGroup>

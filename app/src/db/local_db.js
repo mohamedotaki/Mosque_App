@@ -41,6 +41,13 @@ function setTimeFormat_localDb(data) {
   localStorage.setItem("timeFormat", data);
 }
 
+function setLang(lang) {
+  localStorage.setItem("Lang", lang);
+}
+function getLang() {
+  return localStorage.getItem("Lang");
+}
+
 function getTimeFormat_localDb(data) {
   return localStorage.getItem("timeFormat");
 }
@@ -62,4 +69,6 @@ export {
   getNextIqamahUpdate_localDB,
   setAppVersion_localDb,
   getAppVersion_localDb,
+  getLang,
+  setLang,
 };

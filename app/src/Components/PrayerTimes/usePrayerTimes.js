@@ -4,34 +4,63 @@ import TimeTable from "../../Others/TimeTable.json";
 import Settings from "../../Others/Settings.json";
 import { getPrayerTimes } from "../../db/dbFunctions";
 import {
-  getIqamahTimes_localDB,
-  setIqamahTimes_localDb,
+  getCustomPrayerTimes_localDB,
+  getPrayerTimesNextUpdate_localDB,
+  setCustomPrayerTimes_localDb,
 } from "../../db/local_db";
 
 function usePrayerTimes() {
-  const [data, setData] = useState(getIqamahTimes_localDB());
+  const [data, setData] = useState(getCustomPrayerTimes_localDB());
   const [prayersData, setPrayersData] = useState(
-    prayersCalc(TimeTable, Settings, false, undefined, new Date())
+    prayersCalc(TimeTable, Settings, false, undefined, new Date(), data)
   );
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dataUpdated, setDataUpdated] = useState(false);
 
   useEffect(() => {
-    getPrayerTimes().then((result) => {
-      if (result !== null) {
-        setData(result);
-        setIqamahTimes_localDb(result);
-      }
-    });
+    getPrayerDataFromDB();
   }, []);
 
+  /*   // getting online prayer data once a day after 1pm
+  useEffect(() => {
+    const updateDate = new Date(getPrayerTimesNextUpdate_localDB() || 0);
+    if (updateDate.getTime() <= new Date().getTime()) {
+      getPrayerDataFromDB();
+      setDataUpdated(true);
+    } else {
+      getPrayerDataFromDB(); // to delete
+      // if a user left the app open it will trigger update every day at 1
+      const intervals = updateDate.getTime() - new Date().getTime();
+      console.log(intervals);
+      const timer = setInterval(getPrayerDataFromDB, intervals);
+      return () => clearInterval(timer);
+    }
+  }, [dataUpdated]); */
+
+  // To get online data from Database
+  const getPrayerDataFromDB = () => {
+    console.log("getting Data");
+    getPrayerTimes().then((result) => {
+      if (result) {
+        setCustomPrayerTimes_localDb(result);
+        setData(result);
+      }
+    });
+  };
+
   const updateTime = useCallback(() => {
+    console.log("updating");
     const isAfterIsha = prayersData.countDown.name === "Isha";
     let nowDate = new Date();
     if (isAfterIsha) {
       nowDate.setDate(nowDate.getDate() + 1);
     }
-    setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, nowDate));
-  }, [selectedDate]);
+    getPrayerDataFromDB();
+
+    setPrayersData(
+      prayersCalc(TimeTable, Settings, false, undefined, nowDate, data)
+    );
+  }, [data]);
 
   useEffect(() => {
     const intervals = prayersData.countDown.duration * 1000;
@@ -40,6 +69,7 @@ function usePrayerTimes() {
   }, [updateTime, prayersData.countDown.duration]);
 
   const handleDateChange = (date) => {
+    console.log("handle date changed: ", Settings);
     setSelectedDate(date);
     setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, date));
   };
@@ -63,6 +93,7 @@ function usePrayerTimes() {
     selectedDate,
     handleDateChange,
     handleCountdownRefresh,
+    updateTime,
   };
 }
 

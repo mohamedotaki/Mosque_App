@@ -2,13 +2,11 @@ import React from "react";
 import "./List.css";
 import ListGroup from "react-bootstrap/ListGroup";
 import { format, parseISO } from "date-fns";
-import { getPrayerTimes } from "../../db/dbFunctions";
 import usePrayerTimes from "./usePrayerTimes";
 
 function PrayerList({
   prayersToShow = [],
   prayersData = {},
-  data = [],
   timeFormat = "24h",
   onPrayerClick,
 }) {
@@ -21,7 +19,7 @@ function PrayerList({
     }
   };
   const { setData } = usePrayerTimes();
-  const getIqamahTime = (item, index) => {
+  /*   const getIqamahTime = (item, index) => {
     try {
       if (data[index]?.Name !== "Shurooq") {
         if (data[index]?.Iqamah) {
@@ -50,24 +48,7 @@ function PrayerList({
       console.error("Error calculating Iqamah time:", error);
       return "Error";
     }
-  };
-
-  const getAdhanTime = (item, index) => {
-    try {
-      if (data[index]?.Adhan) {
-        return formatTime(
-          parseISO(`2014-02-11T${data[index].Adhan}:30`),
-          timeFormat
-        );
-      } else {
-        return formatTime(item.time, timeFormat);
-      }
-    } catch (error) {
-      console.error("Error calculating Iqamah time:", error);
-      return "Error";
-    }
-  };
-
+  }; */
   return (
     <>
       <ListGroup horizontal>
@@ -85,32 +66,31 @@ function PrayerList({
         (item, index) =>
           index < 6 && (
             <ListGroup horizontal key={item.name}>
-              <ListGroup.Item className="ListPos">
-                {item.name[0].toUpperCase() + item.name.slice(1)}
-              </ListGroup.Item>
+              <ListGroup.Item className="ListPos">{item.name}</ListGroup.Item>
               <ListGroup.Item
                 className="TimePos"
                 onClick={() =>
                   onPrayerClick(
-                    { ...item, time: getAdhanTime(item, index) },
+                    { ...item, time: formatTime(item.time, timeFormat) },
                     index,
                     true
                   )
                 }
               >
-                {getAdhanTime(item, index)}
+                {formatTime(item.time, timeFormat)}
               </ListGroup.Item>
               <ListGroup.Item
                 className={
-                  item.name.toUpperCase() ===
-                  prayersData.current?.name.toUpperCase()
+                  item.name === prayersData.current?.name
                     ? "TimePos current-prayer"
                     : "TimePos"
                 }
                 type="input"
                 onClick={() => onPrayerClick(item, index, false)}
               >
-                {getIqamahTime(item, index)}
+                {item.name === "Shurooq"
+                  ? "N/A"
+                  : formatTime(item.jtime, timeFormat)}
               </ListGroup.Item>
             </ListGroup>
           )

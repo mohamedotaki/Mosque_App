@@ -3,10 +3,10 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { format } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { ExclamationTriangleFill } from "react-bootstrap-icons";
 
 function DateDisplay({ dateOfPrayers, onDateChange }) {
   const [showCalendar, setShowCalendar] = useState(false);
-  console.log("showCalendar");
   const handleDateClick = () => {
     setShowCalendar(!showCalendar);
   };
@@ -20,13 +20,25 @@ function DateDisplay({ dateOfPrayers, onDateChange }) {
     event.stopPropagation();
   };
   return (
+    // warning showing prayers for date 'dateOfPrayers'
     <ListGroup key={"nhnh"}>
       <ListGroup.Item
         className="blockSelection centerxy"
-        style={{ width: "100%", cursor: "pointer" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          width: "100%",
+          cursor: "pointer",
+          fontWeight: 600,
+          color: dateOfPrayers.getDate() !== new Date().getDate() && "Orange",
+        }}
         onClick={handleDateClick}
       >
         {format(dateOfPrayers, "dd/MMMM/yyyy")}
+        {dateOfPrayers.getDate() !== new Date().getDate() && (
+          <ExclamationTriangleFill color="Orange" />
+        )}
       </ListGroup.Item>
       <ListGroup.Item
         className="blockSelection centerxy"

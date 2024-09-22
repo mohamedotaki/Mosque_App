@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { updatePrayerTime, updateAdhanTime } from "../../db/dbFunctions";
 
-const TimeEditor = ({ prayerToEdit, setShowEditor, userType }) => {
+const TimeEditor = ({ prayerToEdit, setShowEditor, userType, update }) => {
   const [prayerData, setPrayerData] = useState(prayerToEdit);
-
+  console.log(prayerToEdit);
   const handleSubmit = (e) => {
     if (prayerData.adhan) {
       updateAdhanTime(prayerData.Name, prayerData.Time).then((r) => {
         if (r) {
           /*           setUpdate((prev) => !prev);
            */
+          update();
           setShowEditor(false);
         } else {
           alert(r);
@@ -24,6 +25,8 @@ const TimeEditor = ({ prayerToEdit, setShowEditor, userType }) => {
         if (r) {
           /*           setUpdate((prev) => !prev);
            */
+          update();
+
           setShowEditor(false);
         } else {
           alert(r);
@@ -48,12 +51,17 @@ const TimeEditor = ({ prayerToEdit, setShowEditor, userType }) => {
               {"Editing " + prayerData.Name}
               {prayerData.adhan ? " Adhan" : " Iqamah"}
             </h5>
-            {prayerData.OffsetTime && <p>{prayerData.Offset}</p>}{" "}
+            {
+              <p>
+                Current
+                {prayerData.OffsetTime
+                  ? " Offset: " + prayerData.Offset
+                  : " Time: " + prayerToEdit.Time}
+              </p>
+            }{" "}
             <input
               style={{ borderRadius: "20px", textAlign: "center" }}
-              type={prayerData.OffsetTime ? "range" : "time"}
-              min={0}
-              max={60}
+              type="time"
               value={
                 prayerData.OffsetTime ? prayerData.Offset : prayerData.Time
               }

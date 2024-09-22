@@ -18,6 +18,7 @@ function PrayerTimesContent(props) {
     selectedDate,
     handleDateChange,
     handleCountdownRefresh,
+    updateTime,
   } = usePrayerTimes();
   const [prayerToChange, setPrayerToChange] = useState(null);
   const [timeFormat, setTimeFormat] = useState(getTimeFormat_localDb());
@@ -25,7 +26,6 @@ function PrayerTimesContent(props) {
     setTimeFormat(format);
   };
 
-  console.log(prayersData);
   const handlePrayerClick = (item, index, adhan) => {
     if (props.user.userType !== "Admin") {
       return;
@@ -73,7 +73,6 @@ function PrayerTimesContent(props) {
             : prayersData.prayers.today
         }
         prayersData={prayersData}
-        data={data}
         timeFormat={timeFormat}
         onPrayerClick={handlePrayerClick}
         userType={props.user.userType}
@@ -94,6 +93,7 @@ function PrayerTimesContent(props) {
           prayerToEdit={prayerToChange}
           setShowEditor={setPrayerToChange}
           userType={props.user.userType}
+          update={updateTime}
         />
       )}
 

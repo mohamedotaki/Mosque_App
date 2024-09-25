@@ -48,15 +48,33 @@ app.get("/prayerTimes", (req, res) => {
 
 app.post("/updatePrayerTime", (req, res) => {
   const token = req.headers["user-token"];
-  if (verifyToken(token) === false) {
+  /*   if (verifyToken(token) === false) {
     return res.status(511).json(false);
-  }
+  } */
   const { Name, Time, Offset } = req.body;
   const q =
     "UPDATE `prayertimes` SET `Iqamah` = " +
     mysql.escape(Time) +
     ", `Offset` = " +
     mysql.escape(Offset) +
+    "WHERE `prayertimes`.`Name` = " +
+    mysql.escape(Name);
+
+  db.query(q, (err) => {
+    if (err) return res.status(400).json(false);
+    return res.status(200).json(true);
+  });
+});
+
+app.post("/updateAdhanTime", (req, res) => {
+  const token = req.headers["user-token"];
+  /*   if (verifyToken(token) === false) {
+    return res.status(511).json(false);
+  } */
+  const { Name, Time } = req.body;
+  const q =
+    "UPDATE `prayertimes` SET `Adhan` = " +
+    mysql.escape(Time) +
     "WHERE `prayertimes`.`Name` = " +
     mysql.escape(Name);
 

@@ -1,1 +1,26 @@
-{   "welcome": "Welcome to my app!",   "JummuahInfo": "Jummuah prayer is fixed at"}
+{
+    "Home":"Home" ,
+     "Prayer Times":"Prayer Times",
+      "Qibla":"Qibla",
+      "Settings":"Settings" ,
+       "Iqamah":"Iqamah",
+        "Adhan":"Adhan",
+        "Prayer":"Prayer",
+    "Isha":"Isha","Fajr":"Fajr","Shurooq":"Shurooq","Dhuhr":"Dhuhr","Asr":"Asr","Maghrib":"Maghrib"
+    ,"Ballyhaunis Mosque":"Ballyhaunis Mosque",
+    "Time Format":"Time Format",
+    "Language":"Language", 
+    "App Version":"App Version",
+    "Feedback Review":"Feedback Review",
+    "Logout":"Logout",
+    "Login":"Login",
+    "Feedback":"Feedback",
+    "Contact Us":"Contact Us",
+    "About Us":"About Us",
+    "in":"in",
+    "Jummuah prayer is fixed at":"Jummuah prayer is fixed at",
+    "Latest News":"Latest News"
+
+    
+    
+    }

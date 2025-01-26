@@ -1,5 +1,6 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useTranslation } from "react-i18next";
 
 function JummuahInfo({
   data = [],
@@ -7,6 +8,8 @@ function JummuahInfo({
   userType,
   onJummuahClick,
 }) {
+  const { t } = useTranslation();
+
   const getJummuahTime = () => {
     try {
       if (data && data[6] && data[6].Iqamah) {
@@ -30,7 +33,9 @@ function JummuahInfo({
           minWidth: "300px",
         }}
       >
-        <strong>Jummuah prayer is fixed at {getJummuahTime()}</strong>
+        <strong>
+          {t("Jummuah prayer is fixed at")} {getJummuahTime()}
+        </strong>
       </ListGroup.Item>
     </ListGroup>
   );

@@ -9,14 +9,17 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function MobileNav(prams) {
   const [currentBT, setCurrentBT] = React.useState(window.location.href);
+  const { t } = useTranslation();
+
   const navButtons = [
-    { name: "Home", icon: faHouse, link: "/Home" },
-    { name: "Prayer Times", icon: faClock, link: "/PrayerTimes" },
-    { name: "Qibla", icon: faCompass, link: "/Qibla" },
-    { name: "Settings", icon: faGear, link: "/Settings" },
+    { name: t("Home"), icon: faHouse, link: "/Home" },
+    { name: t("Prayer Times"), icon: faClock, link: "/PrayerTimes" },
+    { name: t("Qibla"), icon: faCompass, link: "/Qibla" },
+    { name: t("Settings"), icon: faGear, link: "/Settings" },
   ];
 
   React.useEffect(() => {

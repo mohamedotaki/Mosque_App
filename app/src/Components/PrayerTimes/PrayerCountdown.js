@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useTranslation } from "react-i18next";
 
 function PrayerCountdown({ prayerData }) {
+  const { t } = useTranslation();
+
   const [percentage, setPercentage] = useState(0);
   const [countdown, setCountdown] = useState(prayerData.countDown.duration);
 
@@ -39,7 +42,11 @@ function PrayerCountdown({ prayerData }) {
           "--TimeLeft": percentage + "%",
         }}
       >
-        {prayerData.next.name + " in " + convertSecondsToHMS(countdown)}
+        {t(prayerData.next.name) +
+          " " +
+          t("in") +
+          " " +
+          convertSecondsToHMS(countdown)}
       </ListGroup.Item>
     </ListGroup>
   );

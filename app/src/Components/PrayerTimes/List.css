@@ -75,3 +75,8 @@
     display: none;
   }
 }
+
+#prayer_item div {
+  background-color: #9398a1;
+  border: 0;
+}

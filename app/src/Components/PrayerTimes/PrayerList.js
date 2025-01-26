@@ -1,15 +1,12 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import "./List.css";
 import ListGroup from "react-bootstrap/ListGroup";
-import { format, parseISO } from "date-fns";
-import usePrayerTimes from "./usePrayerTimes";
+import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
-function PrayerList({
-  prayersToShow = [],
-  prayersData = {},
-  timeFormat = "24h",
-  onPrayerClick,
-}) {
+function PrayerList({ prayersData = {}, timeFormat = "24h", onPrayerClick }) {
+  const [prayerToSHow, setPrayerToShow] = useState(prayersData.prayers.today);
+  const { t } = useTranslation();
   const formatTime = (time, currentFormat) => {
     try {
       return format(time, currentFormat === "24h" ? "HH:mm" : "hh:mm");
@@ -18,55 +15,31 @@ function PrayerList({
       return "Error";
     }
   };
-  const { setData } = usePrayerTimes();
-  /*   const getIqamahTime = (item, index) => {
-    try {
-      if (data[index]?.Name !== "Shurooq") {
-        if (data[index]?.Iqamah) {
-          return formatTime(
-            parseISO(`2014-02-11T${data[index].Iqamah}:30`),
-            timeFormat
-          );
-        } else if (data[index]?.Offset) {
-          const offsetTime = new Date(item.time);
-          offsetTime.setMinutes(
-            offsetTime.getMinutes() + parseInt(data[index].Offset)
-          );
-          return formatTime(offsetTime, timeFormat);
-        }
-      }
-      if (!data) {
-        console.log("data is null");
-        getPrayerTimes().then((data) => {
-          if (data) {
-            setData(data);
-          }
-        });
-      }
-      return "N/A";
-    } catch (error) {
-      console.error("Error calculating Iqamah time:", error);
-      return "Error";
-    }
-  }; */
+
+  useEffect(() => {
+    setPrayerToShow(prayersData.prayers.today);
+  }, [prayersData]);
+
   return (
     <>
       <ListGroup horizontal>
         <ListGroup.Item className="ListPos">
-          <strong>Prayer</strong>
+          <strong>{t("Prayer")}</strong>
         </ListGroup.Item>
         <ListGroup.Item className="TimePos">
-          <strong>Adhan</strong>
+          <strong>{t("Adhan")}</strong>
         </ListGroup.Item>
         <ListGroup.Item className="TimePos">
-          <strong>Iqamah</strong>
+          <strong>{t("Iqamah")}</strong>
         </ListGroup.Item>
       </ListGroup>
-      {prayersToShow.map(
+      {prayerToSHow.map(
         (item, index) =>
           index < 6 && (
             <ListGroup horizontal key={item.name}>
-              <ListGroup.Item className="ListPos">{item.name}</ListGroup.Item>
+              <ListGroup.Item className="ListPos">
+                {t(item.name)}
+              </ListGroup.Item>
               <ListGroup.Item
                 className="TimePos"
                 onClick={() =>

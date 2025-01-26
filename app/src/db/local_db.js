@@ -21,25 +21,6 @@ function setUser_localDB(
   );
 }
 
-function setIqamahTimes_localDb(data) {
-  localStorage.setItem("IqamahTimes", JSON.stringify(data));
-  var d = new Date();
-
-  d.setDate(d.getDate() + ((4 + 7 - d.getDay()) % 7 || 7));
-  d.setHours(13, 0, 0);
-  localStorage.setItem("NextIqamahUpdate", d);
-}
-function setAdhanTimes_localDb(data) {
-  localStorage.setItem("AdhanTimes", JSON.stringify(data));
-}
-
-function getIqamahTimes_localDB() {
-  return JSON.parse(localStorage.getItem("IqamahTimes"));
-}
-function getAdhanTimes_localDB() {
-  return JSON.parse(localStorage.getItem("AdhanTimes"));
-}
-
 function setTimeFormat_localDb(data) {
   localStorage.setItem("timeFormat", data);
 }
@@ -58,39 +39,28 @@ function getAppVersion_localDb(data) {
 // new better storage
 function setCustomPrayerTimes_localDb(data) {
   localStorage.setItem("PrayerTimes", JSON.stringify(data));
-  var d = new Date();
-  d.setDate(d.getDate() + 1);
-  d.setHours(13, 0, 0);
-  localStorage.setItem("PrayerTimesNextUpdate", d);
-}
-
-function setNextUpdate_localDb() {
-  var d = new Date();
-  d.setDate(d.getDate() + 1);
-  d.setHours(13, 0, 0);
-  localStorage.setItem("PrayerTimesNextUpdate", "");
 }
 
 function getCustomPrayerTimes_localDB() {
   return JSON.parse(localStorage.getItem("PrayerTimes"));
 }
-
-function getPrayerTimesNextUpdate_localDB() {
-  return localStorage.getItem("PrayerTimesNextUpdate");
+function setLang_localDB(data) {
+  localStorage.setItem("MosqueAppLang", data);
 }
+
+function getLang_localDB() {
+  return localStorage.getItem("MosqueAppLang");
+}
+
 export {
   getUser_localDB,
   setUser_localDB,
-  setIqamahTimes_localDb,
   setTimeFormat_localDb,
   getTimeFormat_localDb,
-  getIqamahTimes_localDB,
-  getPrayerTimesNextUpdate_localDB,
   setAppVersion_localDb,
   getAppVersion_localDb,
-  setAdhanTimes_localDb,
-  getAdhanTimes_localDB,
   setCustomPrayerTimes_localDb,
   getCustomPrayerTimes_localDB,
-  setNextUpdate_localDb,
+  getLang_localDB,
+  setLang_localDB,
 };

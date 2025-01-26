@@ -5,11 +5,12 @@ import Card from "../Components/Card/Card";
 import { Plus, Dash } from "react-bootstrap-icons";
 import CardEdit from "../Components/Card/CardEdit";
 import { getPosts } from "../db/dbFunctions";
-import TimeEditor from "../Components/PrayerTimes/TimeEditor";
+import { useTranslation } from "react-i18next";
 
 export default function Home(props) {
   const [posts, setPosts] = React.useState(null);
   const [showForm, setShowForm] = React.useState(false);
+  const { t } = useTranslation();
 
   const updatePosts = () => {
     getPosts().then((data) => {
@@ -26,7 +27,7 @@ export default function Home(props) {
   return (
     <div className="HomeView">
       <div className="PostsView">
-        <h2 style={{ display: "inline-block" }}>Latest News</h2>
+        <h2 style={{ display: "inline-block" }}>{t("Latest News")}</h2>
         <button
           className="AddPostBT"
           variant="primary"

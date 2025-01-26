@@ -67,11 +67,6 @@ function PrayerTimesContent(props) {
         handleCountDownZero={handleCountdownRefresh}
       />
       <PrayerList
-        prayersToShow={
-          prayersData.isAfterIsha
-            ? prayersData.prayers.tomorrow
-            : prayersData.prayers.today
-        }
         prayersData={prayersData}
         timeFormat={timeFormat}
         onPrayerClick={handlePrayerClick}

@@ -5,7 +5,6 @@ import Settings from "../../Others/Settings.json";
 import { getPrayerTimes } from "../../db/dbFunctions";
 import {
   getCustomPrayerTimes_localDB,
-  getPrayerTimesNextUpdate_localDB,
   setCustomPrayerTimes_localDb,
 } from "../../db/local_db";
 
@@ -19,6 +18,7 @@ function usePrayerTimes() {
 
   useEffect(() => {
     getPrayerDataFromDB();
+    updateTime();
   }, []);
 
   /*   // getting online prayer data once a day after 1pm
@@ -39,7 +39,6 @@ function usePrayerTimes() {
 
   // To get online data from Database
   const getPrayerDataFromDB = () => {
-    console.log("getting Data");
     getPrayerTimes().then((result) => {
       if (result) {
         setCustomPrayerTimes_localDb(result);
@@ -49,14 +48,12 @@ function usePrayerTimes() {
   };
 
   const updateTime = useCallback(() => {
-    console.log("updating");
     const isAfterIsha = prayersData.countDown.name === "Isha";
     let nowDate = new Date();
     if (isAfterIsha) {
       nowDate.setDate(nowDate.getDate() + 1);
     }
     getPrayerDataFromDB();
-
     setPrayersData(
       prayersCalc(TimeTable, Settings, false, undefined, nowDate, data)
     );
@@ -69,7 +66,6 @@ function usePrayerTimes() {
   }, [updateTime, prayersData.countDown.duration]);
 
   const handleDateChange = (date) => {
-    console.log("handle date changed: ", Settings);
     setSelectedDate(date);
     setPrayersData(prayersCalc(TimeTable, Settings, false, undefined, date));
   };

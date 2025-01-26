@@ -18,6 +18,7 @@ import InstallButton from "./Components/InstallButton";
 import UpdateApp from "./Fun/UpdateApp";
 import { getUser_localDB, setUser_localDB } from "./db/local_db";
 import Feedback from "./Components/Feedback/Feedback";
+import "./translation/i18n";
 
 function App() {
   if (getUser_localDB() === null) {
@@ -31,7 +32,7 @@ function App() {
     setLoggedIn(!loggedin);
   };
 
-  UpdateApp(); // forces update
+  //UpdateApp(); // forces update
 
   return (
     <>
@@ -46,6 +47,7 @@ function App() {
 
       <div className="Body">
         <Routes>
+          <Route path="/*" element={<Home user={user} />} />
           <Route
             path="/Login"
             element={<Login updateLogin={updateUserState} />}

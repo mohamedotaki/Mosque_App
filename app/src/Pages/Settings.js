@@ -13,27 +13,66 @@ import {
 } from "react-bootstrap-icons";
 import { logout, login, compareVersionNumber } from "../Fun/User";
 import { appVersion } from "../info";
-import { getTimeFormat_localDb, setTimeFormat_localDb } from "../db/local_db";
+import {
+  getLang_localDB,
+  getTimeFormat_localDb,
+  setLang_localDB,
+  setTimeFormat_localDb,
+} from "../db/local_db";
+import { useTranslation } from "react-i18next";
 
 export default function Settings(props) {
   var timeFormat = getTimeFormat_localDb();
+  var currentLang = getLang_localDB();
+  const { t, i18n } = useTranslation();
 
   const defaultTimeFormat = [
     { name: "24h", value: "24h" },
     { name: "12h", value: "12h" },
   ];
+  const availableLang = [
+    { name: "English", value: "en" },
+    { name: "العربية", value: "ar" },
+  ];
 
   const navigate = useNavigate();
+
+  const onLangSelect = (lang) => {
+    setLang_localDB(lang);
+    changeLanguage(lang);
+  };
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div className="Settings">
       <ListGroup horizontal>
-        <ListGroup.Item className="ListItem">Time Format:</ListGroup.Item>
+        <ListGroup.Item className="ListItem">
+          {t("Time Format")}:
+        </ListGroup.Item>
         <ListGroup.Item className="ListItem">
           <DropDown
             name={timeFormat ? timeFormat : "Select Format"}
             data={defaultTimeFormat}
             results={(time) => setTimeFormat_localDb(time)}
+          />
+        </ListGroup.Item>
+      </ListGroup>
+      <ListGroup horizontal>
+        <ListGroup.Item className="ListItem">{t("Language")}:</ListGroup.Item>
+        <ListGroup.Item className="ListItem">
+          <DropDown
+            name={
+              currentLang
+                ? currentLang === "en"
+                  ? "English"
+                  : "العربية"
+                : "Select Format"
+            }
+            data={availableLang}
+            results={(lang) => onLangSelect(lang)}
           />
         </ListGroup.Item>
       </ListGroup>
@@ -80,7 +119,7 @@ export default function Settings(props) {
                   marginRight: "20px",
                 }}
               />
-              About Us
+              {t("About Us")}
             </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item className="ContactListItem">
@@ -92,7 +131,7 @@ export default function Settings(props) {
                   marginRight: "20px",
                 }}
               />
-              Contact Us
+              {t("Contact Us")}
             </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item className="ContactListItem">
@@ -104,7 +143,7 @@ export default function Settings(props) {
                   marginRight: "20px",
                 }}
               />
-              Feedback
+              {t("Feedback")}
             </Link>{" "}
           </ListGroup.Item>
           <ListGroup.Item
@@ -122,7 +161,7 @@ export default function Settings(props) {
                 marginRight: "20px",
               }}
             />
-            Login
+            {t("Login")}
           </ListGroup.Item>
           <ListGroup.Item
             className="ContactListItem"
@@ -139,7 +178,7 @@ export default function Settings(props) {
                 marginRight: "20px",
               }}
             />
-            Logout
+            {t("Logout")}
           </ListGroup.Item>
           <ListGroup.Item
             className="ContactListItem"
@@ -149,10 +188,12 @@ export default function Settings(props) {
             }}
             onClick={() => navigate("/FeedbackReview")}
           >
-            Feedback Review
+            {t("Feedback Review")}
           </ListGroup.Item>
         </ListGroup>
-        <strong>App Version: {appVersion}</strong>
+        <strong>
+          {t("App Version")}: {appVersion}
+        </strong>
       </div>
     </div>
   );

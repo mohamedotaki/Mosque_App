@@ -1,5 +1,26 @@
 {
-"Home":"أخبار" , "Prayer Times":"أوقات الصلاة", "Qibla":"قبلة","Settings":"أعدادات" , "Iqamah":"أقامة", "Adhan":"أذان","Prayer":"صلاة",
+"Home":"أخبار" ,
+ "Prayer Times":"أوقات الصلاة",
+  "Qibla":"قبلة",
+  "Settings":"أعدادات" ,
+   "Iqamah":"أقامة",
+    "Adhan":"أذان",
+    "Prayer":"صلاة",
 "Isha":"عشاء","Fajr":"فجر","Shurooq":"شروق","Dhuhr":"ضهر","Asr":"عصر","Maghrib":"مغرب", "JummuahInfo":"توقيت صلاة الجمعة ثابت "
-,"Ballyhaunis Mosque":"مسجد باليهونس"
+,"Ballyhaunis Mosque":"مسجد باليهونس",
+"Time Format":"الوقت",
+"Language":"اللغة", 
+"App Version":"إصدار التطبيق",
+"Feedback Review":"مراجعة الملاحظات",
+"Logout":"تسجيل الخروج",
+"Login":"تسجيل الدخول",
+"Feedback":"ملاحظات",
+"Contact Us":"اتصل بنا",
+"About Us":"من نحن",
+"in":"بعد",
+"Jummuah prayer is fixed at":"صلاة الجمعة عند",
+"Latest News":"أخر الاخبار"
+
+
+
 }

@@ -4,8 +4,8 @@ import Alert from "react-bootstrap/Alert";
 const user = getUser_localDB();
 
 function apiLink(link) {
-  var api = "https://mosqueapp.api.alotaki.com/";
-  //var api = "http://localhost:3001/";
+  //var api = "https://mosqueapp.api.alotaki.com/";
+  var api = "http://192.168.0.3:3001/";
   return api + link;
 }
 //Login
